@@ -18,7 +18,7 @@
 
     <update id="updateDrug">
         update drugs set drug_name = #{drugForm.drugNameAdd},specification = #{drugForm.drugSpeAdd},
-         origin = #{drugForm.drugOriginalAdd},
+         origin = #{drugForm.drugOriginalAdd},selling_price=#{drugForm.drugSellPriceAdd},purchase_price=#{drugForm.price},
          number = #{drugForm.number} where drug_no = #{drugForm.drugNoAdd};
     </update>
 

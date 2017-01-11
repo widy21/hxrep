@@ -97,7 +97,13 @@
                 $("#editModal").modal("show");
             }
 
-            $("#drugQryBtn").click(qryFun);
+            //$("#drugQryBtn").click(qryFun);
+            document.onkeydown = function(e){
+                var ev = document.all ? window.event : e;
+                if(ev.keyCode==13) {
+                    qryFun();
+                }
+            }
 
             $("#edit_drug").click(function(){
                 data = {
@@ -105,6 +111,8 @@
                     "drugOriginalAdd": $("#drugOriginalEdit").val(),
                     "drugNameAdd": $("#drugNameEdit").val(),
                     "number": $("#drugNumEdit").val(),
+                    "price": $("#purchasePriceEdit").val(),
+                    "drugSellPriceAdd": $("#sellingPriceEdit").val(),
                     "drugSpeAdd": $("#drugSpeEdit").val()
                 }
                 $.ajax({
@@ -120,12 +128,17 @@
                         } else {
                             alert("药品信息修改成功!");
                             $("#editModal").modal("hide");
+                            qryFun();
                         }
                     }
                 });
             });
 
             $("#reg_btn").click(function(){
+                if($("#drugNum").val()==''){
+                    alert('进货数量不能为空');
+                    return false;
+                }
                 data = {
                     "drugNoAdd": $("#drugNo").val(),
                     "number": $("#drugNum").val()
@@ -170,7 +183,7 @@
             <label for="drugNo">药品编号</label>
 
             <input type="text" id="drugNo" class="form-control">
-            <button type="button" id="drugQryBtn" class="btn btn-default">查询</button>
+            <!--button type="button" id="drugQryBtn" class="btn btn-default">查询</button-->
             <span id="drugNo_error_info" class="form-group" style="color: red;"></span>
         </div>
 
@@ -284,11 +297,11 @@
                     </div>
                     <div class="form-group">
                         <label for="purchasePriceEdit">含税进价</label>
-                        <input type="text" id="purchasePriceEdit" class="form-control" readonly>
+                        <input type="text" id="purchasePriceEdit" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="sellingPriceEdit">零售价格</label>
-                        <input type="text" id="sellingPriceEdit" class="form-control" readonly>
+                        <input type="text" id="sellingPriceEdit" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="drugNumEdit">药品库存</label>

@@ -23,7 +23,7 @@
     <script>
         $(document).ready(function(){
 
-            $("#login_btn").click(function(){
+            function login(){
                 data = {
                     "userName" : $("#userName").val(),
                     "password" : $("#password").val()
@@ -46,6 +46,17 @@
                         }
                     }
                 });
+            }
+
+            document.onkeydown = function(e){
+                var ev = document.all ? window.event : e;
+                if(ev.keyCode==13) {
+                    login();
+                }
+            }
+
+            $("#login_btn").click(function(){
+                login();
             });
         });
     </script>
@@ -59,6 +70,10 @@
         body{
             background-color: #46b8da;
         }
+
+        .input_width{
+            width:200px;
+        }
     </style>
 </head>
 
@@ -68,13 +83,13 @@
         <div class="form-group">
             <label for="userName" class="col-sm-2 control-label">用户名</label>
             <div class="col-sm-10">
-                <input type="text" id="userName" class="form-control" placeholder="输入用户名...">
+                <input type="text" id="userName" class="form-control input_width" placeholder="输入用户名...">
             </div>
         </div>
         <div class="form-group">
             <label for="password" class="col-sm-2 control-label">密码</label>
             <div class="col-sm-10">
-                <input type="password" id="password" class="form-control" placeholder="输入密码...">
+                <input type="password" id="password" class="form-control input_width" placeholder="输入密码...">
             </div>
         </div>
         <span id="error_info" class="form-group"></span>

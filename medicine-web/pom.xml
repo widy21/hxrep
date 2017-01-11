@@ -38,6 +38,14 @@
                 </filters>
             </build>
         </profile>
+        <profile>
+            <id>production_filter</id>
+            <build>
+                <filters>
+                    <filter>${basedir}/src/main/profiles/_maven_filter_production.mvnf</filter>
+                </filters>
+            </build>
+        </profile>
     </profiles>
     <build>
         <finalName>${project.artifactId}</finalName>

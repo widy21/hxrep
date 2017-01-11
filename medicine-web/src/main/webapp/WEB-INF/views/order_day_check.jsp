@@ -73,8 +73,14 @@
                     }
                 });
             };
+            //$("#drugQryBtn").click(qryFun);
 
-            $("#drugQryBtn").click(qryFun);
+            document.onkeydown = function(e){
+                var ev = document.all ? window.event : e;
+                if(ev.keyCode==13) {
+                    qryFun();
+                }
+            }
 
             $("#sellNum").change(function(){
                 if(parseInt($(this).val())>parseInt($("#drugNumShow").val())){
@@ -201,7 +207,7 @@
         <div class="form-group">
             <label for="drugNo">药品编号</label>
             <input type="text" id="drugNo" class="form-control">
-            <button type="button" id="drugQryBtn" class="btn btn-default">查询</button>
+            <!--button type="button" id="drugQryBtn" class="btn btn-default">查询</button-->
             <span id="drugNo_error_info" class="form-group" style="color: red;"></span>
         </div>
         <div class="form-group">
@@ -238,7 +244,7 @@
         </div><br>
         <div class="form-group">
             <label for="costAmount">成本总额</label>
-            <input type="text" id="costAmount" class="form-control">
+            <input type="text" id="costAmount" class="form-control" readonly>
         </div>
         <div class="form-group">
             <label for="sellAmount">销售金额</label>
