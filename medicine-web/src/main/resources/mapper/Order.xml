@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hx.med.sys.dao.OrderDao">
+
+    <!--<select id="pageQueryByDatee" resultType="com.hx.med.sys.entity.Order">-->
+        <!--select * from order where create_time > #{ orderForm.qryStartDate}-->
+        <!--and create_time < '#{ orderForm.qryStartDate}'-->
+        <!--limit '#{ orderForm.start}','#{ orderForm.length}'-->
+    <!--</select>-->
+
+    <insert id="insert">
+        INSERT INTO `med`.`order`
+            (`receivable_amount`,
+             `paid_amount`,
+             `cost_amount`,
+             `gross_profit`,
+             `tax`,
+             `reduceTaxAmount`,
+             `sell_details`,
+             `create_time`,
+             `op_user`)
+        VALUES (#{ orderForm.receivableAmount},
+                #{ orderForm.paidAmount},
+                #{ orderForm.costAmount},
+                #{ orderForm.grossProfit},
+                #{ orderForm.tax},
+                #{ orderForm.reduceTaxAmount},
+                #{ orderForm.sellDetails},
+                now(),#{ orderForm.opUser});
+    </insert>
+</mapper>

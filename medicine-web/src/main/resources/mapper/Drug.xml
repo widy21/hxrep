@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hx.med.sys.dao.DrugDao">
+
+    <select id="query" resultType="com.hx.med.sys.entity.Drug">
+        select * from drugs where drug_no=#{drugNo}
+    </select>
+
+    <insert id="insert">
+        insert into drugs(`drug_no`,`drug_name`,`specification`,`origin`,`purchase_price`,`selling_price`,`create_time`) values(
+        #{newDrugForm.drugNoAdd},#{newDrugForm.drugNameAdd},#{newDrugForm.drugSpeAdd},#{newDrugForm.drugOriginalAdd},
+        #{newDrugForm.price},#{newDrugForm.drugSellPriceAdd},now());
+    </insert>
+
+    <update id="updateDrugNum">
+        update drugs set number = number + #{drugForm.number} where drug_no = #{drugForm.drugNoAdd};
+    </update>
+
+    <update id="updateDrug">
+        update drugs set drug_name = #{drugForm.drugNameAdd},specification = #{drugForm.drugSpeAdd},
+         origin = #{drugForm.drugOriginalAdd},
+         number = #{drugForm.number} where drug_no = #{drugForm.drugNoAdd};
+    </update>
+
+    <update id="updateDrugStock">
+        update drugs set number = number - #{drugForm.number}
+         where drug_no = #{drugForm.drugNoAdd};
+    </update>
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<configuration  debug="false">
+    <property name="log_pattern" value="%d{yyyy-MM-dd HH:mm:ss} %msg%n" />
+    <property name="log_path"  value="E:\work\code\med" />
+    <property name="output_log_level" value="${log.level}" />
+
+    <contextName>LedoPassport</contextName>
+
+    <appender name="rollingInfoFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>E:\work\code\med\med_log.log</file>
+        <append>true</append>
+        <prudent>false</prudent>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${catalina.base}/logs/med_log-%d{yyyy-MM-dd-HH}.log</fileNamePattern>
+            <maxHistory>90</maxHistory>
+        </rollingPolicy>
+        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">-->
+            <!--<level>DEBUG</level>-->
+            <!--<onMatch>ACCEPT</onMatch>-->
+            <!--<onMismatch>DENY</onMismatch>-->
+        <!--</filter>-->
+       <encoder>
+            <charset>UTF-8</charset>
+            <pattern>${log_pattern}</pattern>
+        </encoder>
+    </appender>
+    <root level="${output_log_level}">
+        <appender-ref ref="rollingInfoFile"/>
+    </root>
+</configuration>

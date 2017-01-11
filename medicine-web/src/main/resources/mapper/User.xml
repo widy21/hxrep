@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hx.med.sys.dao.UserDao">
+
+    <select id="query" resultType="com.hx.med.sys.entity.User">
+        select * from user where user_name=#{loginForm.userName}
+        and user_pwd = #{loginForm.password}
+    </select>
+
+    <update id="update">
+        update user set `name`=#{name} where `id`=1
+    </update>
+</mapper>
