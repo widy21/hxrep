@@ -36,6 +36,7 @@
                             alert("新增商品错误!");
                         } else {
                             alert("新增商品成功!");
+                            $("#myModal").modal("hide");
                         }
                     }
                 });
