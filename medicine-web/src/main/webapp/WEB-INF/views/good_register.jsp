@@ -102,7 +102,12 @@
             document.onkeydown = function(e){
                 var ev = document.all ? window.event : e;
                 if(ev.keyCode==13) {
-                    qryFun();
+                    if($("#drug_tab tr").size()>=2 && $("#drugNo").val() != '' && $("#drugNum").val() != ''){
+                        $("#reg_btn").click();
+                    }else{
+                        $("#drugNum").focus();
+                        qryFun();
+                    }
                 }
             }
 

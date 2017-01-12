@@ -19,6 +19,7 @@
                 //e.preventDefault()
                 //$(this).tab('show')
             })
+        });
     </script>
     <style>
         #menu_div {
