@@ -1,8 +1,10 @@
 package com.hx.med.sys.service.interfaces;
 
+import com.hx.med.sys.entity.User;
 import com.hx.med.sys.exception.BusinessException;
 import com.hx.med.sys.vo.NewDrugForm;
 
+import java.util.List;
 import java.util.Map;
 
 /**

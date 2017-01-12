@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
@@ -160,7 +161,7 @@
                     "grossProfit": $("#grossProfit").val(),
                     "tax": $("#tax").val(),
                     "reduceTaxAmount": $("#reduceTaxAmount").val(),
-                    "opUser": $("#opUser").attr("uid"),
+                    "opUser": $("#opUser").val(),
                     "sellDetails": sellDetails
                 }
                 console.log('data = '+JSON.stringify(data));
@@ -203,7 +204,15 @@
 
 <body>
 <div id="main_div">
-    <form role="form" class="form-inline" style="align-content: center;width: 100%;">
+    <form role="form" class="form-inline" style="align-content: center;width:100%;">
+        <div class="form-group" style="min-width: 500px;margin-bottom:5px;">
+            <label for="opUser">业务员&nbsp;&nbsp;&nbsp;</label>
+            <select id="opUser"   class="form-control" style="min-width: 200px;">
+                <c:forEach items="${allUsers}" var="user" varStatus="vs">
+                    <option value="${user.id}">${user.name}</option>
+                </c:forEach>
+            </select>
+        </div><hr>
         <div class="form-group">
             <label for="drugNo">药品编号</label>
             <input type="text" id="drugNo" class="form-control">
@@ -211,17 +220,13 @@
             <span id="drugNo_error_info" class="form-group" style="color: red;"></span>
         </div>
         <div class="form-group">
-            <label for="opUser">业务员</label>
-            <input type="text" id="opUser" class="form-control" value="${requestScope.user.name}" uid="${requestScope.user.id}" readonly>
-        </div>
-        <div class="form-group">
             <label for="drugNameShow">药品名称</label>
             <input type="text" id="drugNameShow" class="form-control" readonly>
-        </div><br>
+        </div>
         <div class="form-group">
             <label for="drugSpeShow">药品规格</label>
             <input type="text" id="drugSpeShow" class="form-control" readonly>
-        </div>
+        </div><br>
         <div class="form-group">
             <label for="drugOriginalShow">药品产地</label>
             <input type="text" id="drugOriginalShow" class="form-control" readonly>
@@ -229,23 +234,23 @@
         <div class="form-group">
             <label for="purchasePriceShow">含税进价</label>
             <input type="text" id="purchasePriceShow" class="form-control" readonly>
-        </div><br>
+        </div>
         <div class="form-group">
             <label for="sellingPriceShow">零售价格</label>
             <input type="text" id="sellingPriceShow" class="form-control" readonly>
-        </div>
+        </div><br>
         <div class="form-group">
             <label for="drugNumShow">药品库存</label>
             <input type="text" id="drugNumShow" class="form-control" readonly>
-        </div>
+        </div><hr>
         <div class="form-group">
             <label for="sellNum">销售数量</label>
             <input type="text" id="sellNum" class="form-control">
-        </div><br>
+        </div>
         <div class="form-group">
             <label for="costAmount">成本总额</label>
             <input type="text" id="costAmount" class="form-control" readonly>
-        </div>
+        </div><br>
         <div class="form-group">
             <label for="sellAmount">销售金额</label>
             <input type="text" id="sellAmount" class="form-control" readonly>

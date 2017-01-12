@@ -7,6 +7,10 @@
         and user_pwd = #{loginForm.password}
     </select>
 
+    <select id="getAllUsers" resultType="com.hx.med.sys.entity.User">
+        select * from user;
+    </select>
+
     <update id="update">
         update user set `name`=#{name} where `id`=1
     </update>

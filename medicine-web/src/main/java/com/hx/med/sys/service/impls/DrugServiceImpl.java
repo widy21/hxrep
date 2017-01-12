@@ -1,5 +1,6 @@
 package com.hx.med.sys.service.impls;
 
+import com.hx.med.sys.entity.User;
 import com.hx.med.sys.exception.BusinessException;
 import com.hx.med.sys.dao.DrugDao;
 import com.hx.med.sys.entity.Drug;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**

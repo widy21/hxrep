@@ -4,6 +4,7 @@ import com.baidu.unbiz.fluentvalidator.annotation.FluentValid;
 import com.hx.med.sys.entity.User;
 import com.hx.med.sys.exception.BusinessException;
 import com.hx.med.sys.service.interfaces.DrugService;
+import com.hx.med.sys.service.interfaces.UserService;
 import com.hx.med.sys.vo.NewDrugForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,14 +33,18 @@ public class DrugController {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     private DrugService drugService;
+    @Autowired
+    private UserService userService;
 
     @RequestMapping(value = "/good_register", method = RequestMethod.GET)
     public Object goodRegister(HttpServletRequest request) throws BusinessException {
         User user = (User) request.getSession().getAttribute("loginUser");
-        Map<String, User> model = new HashMap<String, User>();
+        Map<String, Object> model = new HashMap<String, Object>();
         if(user == null){
             return "login";
         }else {
+//            List<User> allUsers = userService.getAllUsers();
+//            model.put("allUsers", allUsers);
             model.put("user", user);
             return new ModelAndView("good_register",model);
         }
