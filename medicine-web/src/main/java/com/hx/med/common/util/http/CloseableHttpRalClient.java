@@ -5,12 +5,6 @@ import org.apache.http.HttpResponse;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
-/**
- * Created by tengxianfei on 2016/12/7.
- *
- * @author tengxianfei
- * @since 1.6
- */
 public interface CloseableHttpRalClient {
 
   /**

@@ -36,12 +36,6 @@ import java.util.Locale;
 
 import static com.baidu.unbiz.fluentvalidator.ResultCollectors.toComplex;
 
-/**
- * Created by tengxianfei on 2016/11/3.
- *
- * @author tengxianfei
- * @since 1.6
- */
 public class DefaultFluentValidateInterceptor implements MethodInterceptor, InitializingBean, ApplicationContextAware {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DefaultFluentValidateInterceptor.class);

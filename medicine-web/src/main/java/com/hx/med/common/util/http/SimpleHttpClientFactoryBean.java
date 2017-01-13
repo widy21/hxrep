@@ -44,12 +44,6 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by tengxianfei on 2016/11/2.
- *
- * @author tengxianfei
- * @since 1.6
- */
 public final class SimpleHttpClientFactoryBean implements FactoryBean<SimpleHttpClient> {
 
   /**

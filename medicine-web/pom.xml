@@ -57,6 +57,8 @@
                     <include>mapper/*</include>
                     <include>spring/*</include>
                     <include>mybatis-config.xml</include>
+                    <include>ValidationMessages.properties</include>
+                    <include>ValidationMessages_zh_CN.properties</include>
                 </includes>
             </resource>
             <resource>

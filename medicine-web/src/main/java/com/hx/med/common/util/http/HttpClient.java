@@ -3,12 +3,6 @@ package com.hx.med.common.util.http;
 import javax.validation.constraints.NotNull;
 import java.net.URL;
 
-/**
- * Created by tengxianfei on 2016/11/2.
- *
- * @author tengxianfei
- * @since 1.6
- */
 public interface HttpClient {
 
   /**

@@ -11,12 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-/**
- * Created by tengxianfei on 2016/11/3.
- *
- * @author tengxianfei
- * @since 1.6
- */
 public class ValidateEntityCallback extends DefaultValidateCallback implements ValidateCallback {
 
   /**

@@ -6,12 +6,6 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-/**
- * Created by tengxianfei on 2016/11/1.
- *
- * @author tengxianfei
- * @since 1.6
- */
 public class CodeForm {
 
   /**

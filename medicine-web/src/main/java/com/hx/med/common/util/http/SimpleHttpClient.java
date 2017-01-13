@@ -28,12 +28,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.concurrent.RejectedExecutionException;
 
-/**
- * Created by tengxianfei on 2016/11/2.
- *
- * @author tengxianfei
- * @since 1.6
- */
 public final class SimpleHttpClient implements HttpClient, Serializable, DisposableBean {
 
   private static final long serialVersionUID = -96443119900407839L;

@@ -32,12 +32,16 @@
                     'data': JSON.stringify(data),
                     //数据，这里使用的是Json格式进行传输
                     success: function (result) {//返回数据根据结果进行相应的处理
-                        if (result.loginFlag == "false") {
+                        if (result.update_flag == "false") {
                             alert("新增商品错误!");
+                            $("#myModal").modal("hide");
                         } else {
                             alert("新增商品成功!");
                             $("#myModal").modal("hide");
                         }
+                    },
+                    error: function (result) {
+                        console.log(result);
                     }
                 });
             });

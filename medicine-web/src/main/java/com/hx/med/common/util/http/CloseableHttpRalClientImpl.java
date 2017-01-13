@@ -15,12 +15,6 @@ import org.slf4j.LoggerFactory;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
-/**
- * Created by tengxianfei on 2016/12/7.
- *
- * @author tengxianfei
- * @since 1.6
- */
 public class CloseableHttpRalClientImpl implements CloseableHttpRalClient {
 
   /**

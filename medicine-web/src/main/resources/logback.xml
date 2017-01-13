@@ -4,10 +4,10 @@
     <property name="log_path"  value="E:\work\code\med" />
     <property name="output_log_level" value="${log.level}" />
 
-    <contextName>LedoPassport</contextName>
+    <contextName>HXpro</contextName>
 
     <appender name="rollingInfoFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>E:\work\code\med\med_log.log</file>
+        <file>E:\med_log.log</file>
         <append>true</append>
         <prudent>false</prudent>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">

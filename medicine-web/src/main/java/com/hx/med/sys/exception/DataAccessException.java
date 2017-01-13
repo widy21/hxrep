@@ -1,11 +1,5 @@
 package com.hx.med.sys.exception;
 
-/**
- * Created by tengxianfei on 2016/11/4.
- *
- * @author tengxianfei
- * @since 1.6
- */
 public class DataAccessException extends RuntimeException{
 
   private static final long serialVersionUID = -4256459731170546117L;

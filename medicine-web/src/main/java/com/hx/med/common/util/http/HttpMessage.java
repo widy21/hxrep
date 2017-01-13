@@ -9,12 +9,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-/**
- * Created by tengxianfei on 2016/11/2.
- *
- * @author tengxianfei
- * @since 1.6
- */
 public class HttpMessage {
 
   /**

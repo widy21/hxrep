@@ -6,6 +6,8 @@ import com.hx.med.sys.dao.DrugDao;
 import com.hx.med.sys.entity.Drug;
 import com.hx.med.sys.service.interfaces.DrugService;
 import com.hx.med.sys.vo.NewDrugForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,11 @@ import java.util.Map;
 
 @Service
 public class DrugServiceImpl implements DrugService {
+
+    /**
+     * logger.
+     */
+    private Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     DrugDao drugDao;
 
@@ -29,6 +36,7 @@ public class DrugServiceImpl implements DrugService {
             drugDao.insert(newDrugForm);
             resultMap.put("update_flag", "success");
         }catch (Exception e){
+            logger.debug("saveNewDrug error : [{}]", e.getMessage());
             resultMap.put("update_flag","false");
             throw new BusinessException("saveNewDrug error :"+e.getMessage());
         }
@@ -48,6 +56,7 @@ public class DrugServiceImpl implements DrugService {
             }
         }catch (Exception e){
             resultMap.put("query_flag","false");
+            logger.debug("queryDrugByNo error : [{}]", e.getMessage());
             throw new BusinessException("queryDrugByNo error :"+e.getMessage());
         }
         return resultMap;

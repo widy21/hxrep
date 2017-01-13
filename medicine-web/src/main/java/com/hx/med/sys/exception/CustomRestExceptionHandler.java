@@ -30,15 +30,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.UnexpectedTypeException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by tengxianfei on 2016/10/27.
- *
- * @author tengxianfei
- * @since 1.6
- */
 @ControllerAdvice
 public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -271,6 +266,9 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
   public ResponseEntity<Object> handleAll(final Exception ex, final WebRequest request) {
     final BaseResult<String> apiError = new BaseResult<>(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()),
       HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), MessageSupport.getText("global.500.error"));
-    return new ResponseEntity<Object>(apiError, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+      HttpHeaders headers = new HttpHeaders();
+      MediaType mediaType=new MediaType("text","html", Charset.forName("UTF-8"));
+      headers.setContentType(mediaType);
+    return new ResponseEntity<Object>(apiError, headers, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }
