@@ -80,6 +80,10 @@
                 var ev = document.all ? window.event : e;
                 if(ev.keyCode==13) {
                     qryFun();
+                    $("#sellNum").val('0');
+                    $("#sellNum").focus();
+                    $("#costAmount").val('');
+                    $("#sellAmount").val('');
                 }
             }
 
@@ -92,6 +96,7 @@
                 var amount = parseFloat($(this).val())*parseFloat($("#sellingPriceShow").val());
                 $("#costAmount").val(costAmount.toFixed(2));
                 $("#sellAmount").val(amount.toFixed(2));
+                $("#add_row_btn").focus();
             });
 
             $("#add_row_btn").click(function () {
@@ -111,6 +116,7 @@
                 $("#drug_tab").append(trHTML);
                 calculateTotalAmount();
                 $("#totalInfoForm").show();
+                $("#drugNo").focus();
                 $(".del_row_btn").click(function () {
                     $(this).parent().parent().remove();
                     calculateTotalAmount();

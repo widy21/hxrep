@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hx.med.sys.dao.DrugDao;
 import com.hx.med.sys.dao.OrderDao;
+import com.hx.med.sys.entity.Order;
 import com.hx.med.sys.entity.User;
 import com.hx.med.sys.exception.BusinessException;
 import com.hx.med.sys.service.interfaces.DrugService;
@@ -75,6 +76,15 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public Map queryOrderByDate(OrderForm orderForm) throws BusinessException {
-        return null;
+        Map resultMap = new HashMap();
+        try{
+            List<Order> orders = orderDao.pageQueryByDate(orderForm);
+            resultMap.put("orders", orders);
+            resultMap.put("opt_flag", "success");
+        }catch (Exception e){
+            resultMap.put("opt_flag","false");
+            throw new BusinessException("queryOrderByDate error :"+e.getMessage());
+        }
+        return resultMap;
     }
 }

@@ -39,7 +39,7 @@
     <ul id="myTab">
         <li><a  href="${pageContext.request.contextPath}/med/good_register" ><h3>来货登记</h3></a></li>
         <li><a  href="${pageContext.request.contextPath}/med/show_order_checkout" ><h3>订单日结</h3></a></li>
-        <li><a  href="${pageContext.request.contextPath}/med/order_query" ><h3>订单查询</h3></a></li>
+        <li><a  href="${pageContext.request.contextPath}/med/show_order_msg" ><h3>订单查询</h3></a></li>
     </ul>
 </div>
 </body>

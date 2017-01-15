@@ -2,14 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hx.med.sys.dao.OrderDao">
 
-    <!--<select id="pageQueryByDatee" resultType="com.hx.med.sys.entity.Order">-->
-        <!--select * from order where create_time > #{ orderForm.qryStartDate}-->
-        <!--and create_time < '#{ orderForm.qryStartDate}'-->
-        <!--limit '#{ orderForm.start}','#{ orderForm.length}'-->
-    <!--</select>-->
+    <select id="pageQueryByDatee" resultType="com.hx.med.sys.entity.Order">
+        select * from drug_order where
+        <![CDATA[ create_time > '#{ orderForm.qryStartDate}'
+        and create_time < '#{ orderForm.qryStartDate}'
+        limit #{ orderForm.start},#{ orderForm.length} ]]>
+    </select>
 
     <insert id="insert">
-        INSERT INTO `med`.`order`
+        INSERT INTO `med`.`drug_order`
             (`receivable_amount`,
              `paid_amount`,
              `cost_amount`,

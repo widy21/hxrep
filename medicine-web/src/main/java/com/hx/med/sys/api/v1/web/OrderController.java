@@ -52,6 +52,20 @@ public class OrderController {
         }
     }
 
+    @RequestMapping(value = "/show_order_msg", method = RequestMethod.GET)
+    public Object showOrderMsg(HttpServletRequest request) throws BusinessException {
+        User user = (User) request.getSession().getAttribute("loginUser");
+        Map<String, Object> model = new HashMap<String, Object>();
+        if(user == null){
+            return "login";
+        }else {
+            List<User> allUsers = userService.getAllUsers();
+            model.put("allUsers", allUsers);
+            model.put("user", user);
+            return new ModelAndView("order_msg",model);
+        }
+    }
+
     /**
      * 订单入库
      * @return
@@ -59,8 +73,20 @@ public class OrderController {
      */
     @ResponseBody
     @RequestMapping(value = "/order_checkout", method = RequestMethod.POST)
-    public Object orderCheckout(@RequestBody @FluentValid final OrderForm orderForms) throws BusinessException {
-        Map resultMap = orderService.generateOrder(orderForms);
+    public Object orderCheckout(@RequestBody @FluentValid final OrderForm orderForm) throws BusinessException {
+        Map resultMap = orderService.generateOrder(orderForm);
+        return resultMap;
+    }
+
+    /**
+     * 订单查询
+     * @return
+     * @throws BusinessException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/order_qry", method = RequestMethod.GET)
+    public Object orderQry(@RequestBody @FluentValid final OrderForm orderForm) throws BusinessException {
+        Map resultMap = orderService.queryOrderByDate(orderForm);
         return resultMap;
     }
 

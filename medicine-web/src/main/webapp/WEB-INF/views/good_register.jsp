@@ -33,15 +33,16 @@
                     //数据，这里使用的是Json格式进行传输
                     success: function (result) {//返回数据根据结果进行相应的处理
                         if (result.update_flag == "false") {
-                            alert("新增商品错误!");
+                            alert("新增药品错误!");
                             $("#myModal").modal("hide");
                         } else {
-                            alert("新增商品成功!");
+                            alert("新增药品成功!");
                             $("#myModal").modal("hide");
                         }
                     },
                     error: function (result) {
-                        console.log(result);
+                        console.log(result.responseText);
+                        alert("新增药品错误,请检查配置信息是否正确!");
                     }
                 });
             });
@@ -87,6 +88,10 @@
                             $("#drug_tab").append(trHTML);
                             $(".edit_btn").click(edit_func);
                         }
+                    },
+                    error: function (result) {
+                        console.log(result.responseText);
+                        alert("查询药品错误,请检查查询条件是否正确!");
                     }
                 });
             };
@@ -140,6 +145,10 @@
                             $("#editModal").modal("hide");
                             qryFun();
                         }
+                    },
+                    error: function (result) {
+                        console.log(result.responseText);
+                        alert("修改药品信息错误,请检查配置信息是否正确!");
                     }
                 });
             });
@@ -165,8 +174,13 @@
                             alert("库存增加失败!");
                         } else {
                             alert("库存增加成功!");
+                            $("#drugNum").val('0');
                             qryFun();
                         }
+                    },
+                    error: function (result) {
+                        console.log(result.responseText);
+                        alert("库存增加错误,请检查配置信息是否正确!");
                     }
                 });
             });
