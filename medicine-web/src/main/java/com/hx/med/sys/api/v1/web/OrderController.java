@@ -84,7 +84,7 @@ public class OrderController {
      * @throws BusinessException
      */
     @ResponseBody
-    @RequestMapping(value = "/order_qry", method = RequestMethod.GET)
+    @RequestMapping(value = "/order_qry", method = RequestMethod.POST)
     public Object orderQry(@RequestBody @FluentValid final OrderForm orderForm) throws BusinessException {
         Map resultMap = orderService.queryOrderByDate(orderForm);
         return resultMap;

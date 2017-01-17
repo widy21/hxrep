@@ -13,4 +13,6 @@ public interface OrderDao {
     void insert(@Param("orderForm") OrderForm orderForm);
 
     List<Order> pageQueryByDate(@Param("orderForm") OrderForm orderForm);
+
+    Integer pageCountQueryByDate(@Param("orderForm") OrderForm orderForm);
 }

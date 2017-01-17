@@ -2,8 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hx.med.sys.dao.OrderDao">
 
-    <select id="pageQueryByDatee" resultType="com.hx.med.sys.entity.Order">
+    <select id="pageQueryByDate" resultType="com.hx.med.sys.entity.Order">
         select * from drug_order where
+        <![CDATA[ create_time > '#{ orderForm.qryStartDate}'
+        and create_time < '#{ orderForm.qryStartDate}'
+        limit #{ orderForm.start},#{ orderForm.length} ]]>
+    </select>
+
+    <select id="pageCountQueryByDate" resultType="Integer">
+        select count(*) from drug_order where
         <![CDATA[ create_time > '#{ orderForm.qryStartDate}'
         and create_time < '#{ orderForm.qryStartDate}'
         limit #{ orderForm.start},#{ orderForm.length} ]]>

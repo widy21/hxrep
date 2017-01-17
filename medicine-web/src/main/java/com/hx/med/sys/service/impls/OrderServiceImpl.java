@@ -3,6 +3,7 @@ package com.hx.med.sys.service.impls;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.hx.med.common.util.PageUtil;
 import com.hx.med.sys.dao.DrugDao;
 import com.hx.med.sys.dao.OrderDao;
 import com.hx.med.sys.entity.Order;
@@ -13,6 +14,8 @@ import com.hx.med.sys.service.interfaces.OrderService;
 import com.hx.med.sys.vo.NewDrugForm;
 import com.hx.med.sys.vo.OrderForm;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +32,7 @@ public class OrderServiceImpl implements OrderService{
     /**
      * logger.
      */
-//    private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     OrderDao orderDao;
@@ -79,9 +82,15 @@ public class OrderServiceImpl implements OrderService{
         Map resultMap = new HashMap();
         try{
             List<Order> orders = orderDao.pageQueryByDate(orderForm);
+            Integer recordNum = orderDao.pageCountQueryByDate(orderForm);
+            PageUtil pageUtil = new PageUtil(10, recordNum, orderForm.getCurrentPage());
             resultMap.put("orders", orders);
+            resultMap.put("recordNum", recordNum);
+            resultMap.put("currentPage", orderForm.getCurrentPage());
+            resultMap.put("pageCount", pageUtil.getPageCount());
             resultMap.put("opt_flag", "success");
         }catch (Exception e){
+            logger.debug("queryOrderByDate error :{}",e.getMessage());
             resultMap.put("opt_flag","false");
             throw new BusinessException("queryOrderByDate error :"+e.getMessage());
         }

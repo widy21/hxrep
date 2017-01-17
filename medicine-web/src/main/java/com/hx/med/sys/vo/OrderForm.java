@@ -28,11 +28,21 @@ public class OrderForm {
 
     private String qryEndDate;
 
+    private Integer currentPage;
+
     private Integer start;
 
     private Integer length;
 
     private Integer opUser;
+
+    public Integer getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(Integer currentPage) {
+        this.currentPage = currentPage;
+    }
 
     public Double getReduceTaxAmount() {
         return reduceTaxAmount;
