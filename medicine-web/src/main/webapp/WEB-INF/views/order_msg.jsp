@@ -14,63 +14,94 @@
     <script src="<%=request.getContextPath()%>/js/jquery-1.9.1.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="<%=request.getContextPath()%>/js/bootstrap.min.js"></script>
+    <script src="<%=request.getContextPath()%>/js/jquery.twbsPagination.js" type="text/javascript"></script>
     <script>
         $(document).ready(function(){
-            var qryFun = function(obj){
-                data = {
-                    "qryStartDate": $("#qryStartDate").val(),
-                    "qryEndDate": $("#qryEndDate").val(),
-                    "opUser": $("#opUser").val(),
-                    "currentPage": obj.page_num,
-                    "start": $("#start").val()
-                }
-                $.ajax({
-                    type: "POST",  //提交方式
-                    url: "${pageContext.request.contextPath}/med/order_qry",//路径
-                    'contentType': 'application/json',
-                    'dataType': 'json',
-                    'data': JSON.stringify(data),
-                    //数据，这里使用的是Json格式进行传输
-                    success: function (result) {//返回数据根据结果进行相应的处理
-                        if (result.query_flag == "none") {
-                            $("#drugNo_error_info").html("药品不存在!");
-                        } else if (result.query_flag == "false") {
-                            $("#drugNo_error_info").html("查询出错!");
-                        } else {
-                            console.log(result);
-//                            $("#drugNo_error_info").empty();
-//                            var drug = result.drug;
-//                            $("#drug_tab tr:eq(1)").remove();
-//                            var trHTML = "<tr><td>1</td><td>"
-//                                    +drug.drugNo+"</td><td>"
-//                                    +drug.drugName+"</td><td>"
-//                                    +drug.specification+"</td><td>"
-//                                    +drug.purchasePrice+"</td><td>"
-//                                    +drug.sellingPrice+"</td><td>"
-//                                    +drug.number+"</td><td>"
-//                                    +drug.origin+"</td>"
-//                                    +"<td><button type='button' " +
-//                                    "edit_drug_no='"+drug.drugNo+"' " +
-//                                    "edit_drug_origin='"+drug.origin+"' " +
-//                                    "edit_drug_name='"+drug.drugName+"' " +
-//                                    "edit_drug_spe='"+drug.specification+"' " +
-//                                    "edit_drug_purchase_price='"+drug.purchasePrice+"' " +
-//                                    "edit_drug_sell_price='"+drug.sellingPrice+"' " +
-//                                    "edit_drug_num='"+drug.number+"' " +
-//                                    "class='btn btn-default edit_btn'>修改</button></td></tr>"
-//                            $("#drug_tab").append(trHTML);
-//                            $(".edit_btn").click(edit_func);
-                        }
-                    },
-                    error: function (result) {
-                        console.log(result.responseText);
-                        alert("查询药品错误,请检查查询条件是否正确!");
-                    }
-                });
-            };
+            $("#qry_btn").click(initDrugData);
 
-            $("#qry_btn").click(qryFun);
-        });
+            var initDrugData =function() {
+                //重置分页组件否则保留上次查询的，一般来说很多问题出现与这三行代码有关如：虽然数据正确但是页码不对仍然为上一次查询出的一致
+                $('#pagination-log').empty();
+                $('#pagination-log').removeData("twbs-pagination");
+                $('#pagination-log').unbind("page");
+                //将页面的数据容器制空
+                $("#drug_tab tr :gt(0)").remove();
+                //设置默认当前页
+                var pagenow = 1;
+                //设置默认总页数
+                var totalPage = 1;
+                //设置默认可见页数
+                var visiblecount = 5;
+                //加载后台数据页面
+                function loaddata() {
+                    data = {
+                        "qryStartDate": $("#qryStartDate").val(),
+                        "qryEndDate": $("#qryEndDate").val(),
+                        "opUser": $("#opUser").val(),
+                        "currentPage": obj.page_num,
+                        "start": $("#start").val()
+                    }
+                    $.ajax({
+                        type: "POST",  //提交方式
+                        url: "${pageContext.request.contextPath}/med/order_qry",//路径
+                        'contentType': 'application/json',
+                        'dataType': 'json',
+                        'data': JSON.stringify(data),
+                        success : function(data) {
+                            var htmlobj = "";
+                            totalPage = data.page.totalPage;//将后台数据复制给总页数
+                            totalcount = data.page.totalCount;
+                            $("#userlogbody").empty();
+                            $.each(data.userlog, function(index, userlog) {
+                                htmlobj = htmlobj + "<tr>"
+                                + "<td><input type='checkbox'/></td>" + "<td>"
+                                + userlog.toUserName + "</td>" + "<td>"
+                                + userlog.fromUserName + "</td>" + "<td>"
+                                + userlog.createTime + "</td>" + "<td>"
+                                + userlog.eventType + "</td>" ;
+                                if(userlog.eventType=="LOCATION"){
+                                    htmlobj = htmlobj + "<td><button name="+ userlog.eventType
+                                    + " location='"+userlog.details+"' class='btn btn-danger btn-lg  btn-sm no-radius' data-toggle='modal' data-target='#myModal' onclick='showmodal(this)' >"
+                                    + "<i class='glyphicon glyphicon-map-marker'>  LOCATION</i></button></td>";
+                                }else{
+                                    htmlobj = htmlobj +"<td>"+ userlog.details + "</td>";
+                                };
+
+                                htmlobj = htmlobj + "</tr>";
+
+                                $("#userlogbody").append(htmlobj);
+                                htmlobj = "";
+
+                            });
+                            //后台总页数与可见页数比较如果小于可见页数则可见页数设置为总页数，
+                            if (totalPage < visiblecount) {
+                                visiblecount = totalPage;
+                            }
+                            $('#pagination-log').twbsPagination({
+                                totalPages : totalPage,
+                                visiblePages : visiblecount,
+                                version : '1.1',
+                                //页面点击时触发事件
+                                onPageClick : function(event, page) {
+                                    // 将当前页数重置为page
+                                    pagenow = page
+                                    //调用后台获取数据函数加载点击的页码数据
+                                    loaddata();
+
+                                }
+                            });
+
+                        },
+                        error : function(e) {
+                            alert("s数据访问失败")
+                        }
+
+                    });
+                }
+                //函数初始化是调用内部函数
+                loaddata();
+            }
+            });
     </script>
     <style>
         body{
@@ -122,31 +153,9 @@
         <th>创建时间</th>
         <th>操作</th>
     </table>
-    <div>
-        <c:if test="${currentPage != 1}">
-        <nav class="pull-right">
-            <ul class="pagination">
-                <li class="${currentPage==1?'disabled':''}">
-                    <a style="cursor: pointer" onclick="${currentPage==1?'':qryFun(this)}" page_num="${currentPage-1}">前一页</a>
-                </li>
-                <%
-                    int page_num=10;
-                    //计算要显示的页数
-                    var num=para0%page_num==0?para0-(page_num-1):parseInt(para0/page_num)*page_num+1;
-                    for(i in range(0,page_num+1)){
-                        if((i+num)>para2) break;
-                %>
-                <li class="${(num+i)==para0?'active':''} text-info">
-                    <a style="cursor: pointer;" onclick="${para1}" page_num="${num+i,numberFormat='#'}">${num+i,numberFormat="#"}</a>
-                </li>
-                <%}%>
-                <li  class="${para0==para2?'disabled':''}">
-                    <a onclick="${para0==para2?'':para1}" style="cursor: pointer" page_num="${para0+1}">后一页</a>
-                </li>
-            </ul>
-            <p class="text-right">第${para0}页  共${para2}页 共${para3}条</p></nav>
-        </c:if>
-    </div>
+    <span style="font-size:14px;"><div class="text-center">
+        <ul id="pagination-log" class="pagination-sm"></ul>
+    </div></span>
 </div>
 </body>
 </html>
