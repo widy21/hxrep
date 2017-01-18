@@ -91,7 +91,7 @@ public class OrderServiceImpl implements OrderService{
             for (Order order : orders) {
                 User user  = userDao.getUserById(order.getOpUser());
                 if(user != null){
-                    order.setOpUserName(user.getUserName());
+                    order.setOpUserName(user.getName());
                 }
             }
             Integer recordNum = orderDao.pageCountQueryByDate(orderForm);

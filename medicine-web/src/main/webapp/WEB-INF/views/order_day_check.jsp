@@ -140,7 +140,9 @@
             }
 
             $("#acturalAmount").change(function(){
-                var tax = parseFloat($(this).val())*0.15;
+                //税额 = 含税毛利（实收-成本） * 0.15
+                var totalCostAmount = parseFloat($("#totalCostAmount").val());
+                var tax = (parseFloat($(this).val())-totalCostAmount)*0.15;
                 var reduceTaxAmount = parseFloat($(this).val()) - tax;
                 var grossProfit = parseFloat(reduceTaxAmount) - parseFloat($("#totalCostAmount").val());
                 $("#tax").val(tax.toFixed(2));

@@ -75,7 +75,7 @@
                                 + order.tax + "</td><td>"
                                 + order.reduceTaxAmount + "</td><td>"
                                 + order.opUserName + "</td><td>"
-                                + order.createTime + "</td><td>"
+                                + order.createTime.substring(0,10) + "</td><td>"
                                 + "订单详情</td>"
 
                                 htmlobj = htmlobj + "</tr>";
@@ -136,12 +136,12 @@
     <form role="form" class="form-inline" style="align-content: center;width: 100%;">
         <div class="form-group">
             <label for="qryStartDate">开始时间</label>
-            <input type="text" id="qryStartDate" class="form-control date_format" value="">
+            <input type="text" id="qryStartDate" class="form-control date_format" value="" readonly>
         </div>
 
         <div class="form-group">
             <label for="qryEndDate">结束时间</label>
-            <input type="text" id="qryEndDate" class="form-control date_format" value="">
+            <input type="text" id="qryEndDate" class="form-control date_format" value="" readonly>
 
 
         </div>

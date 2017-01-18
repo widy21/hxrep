@@ -3,17 +3,56 @@
 <mapper namespace="com.hx.med.sys.dao.OrderDao">
 
     <select id="pageQueryByDate" resultType="com.hx.med.sys.entity.Order">
-        select * from drug_order where
-        <![CDATA[ create_time > #{ orderForm.qryStartDate}
-        and create_time < #{ orderForm.qryEndDate}
-        limit #{ orderForm.start},#{ orderForm.pageSize}]]>
+        SELECT
+          SUM(`receivable_amount`) AS receivable_amount,
+          SUM(`paid_amount`) AS paid_amount,
+          SUM(`cost_amount`) AS cost_amount,
+          SUM(`gross_profit`) AS gross_profit,
+          SUM(`tax`) AS tax,
+          SUM(`reduceTaxAmount`) AS reduceTaxAmount,
+          op_user,
+          LEFT(create_time,10) AS create_time
+        FROM `med`.`drug_order` where
+        <![CDATA[ LEFT(create_time,10) >= #{ orderForm.qryStartDate}
+        and LEFT(create_time,10) <= #{ orderForm.qryEndDate}
+        and op_user= #{ orderForm.opUser}
+        GROUP BY LEFT(create_time,10)
+        order by create_time desc
+        limit #{ orderForm.start},#{ orderForm.pageSize}
+        ]]>
     </select>
 
     <select id="pageCountQueryByDate" resultType="Integer">
+        SELECT COUNT(*) FROM (SELECT
+          SUM(`receivable_amount`) AS receivable_amount,
+          SUM(`paid_amount`) AS paid_amount,
+          SUM(`cost_amount`) AS cost_amount,
+          SUM(`gross_profit`) AS gross_profit,
+          SUM(`tax`) AS tax,
+          SUM(`reduceTaxAmount`) AS reduceTaxAmount,
+          op_user,
+          LEFT(create_time,10) AS create_time
+        FROM `med`.`drug_order` where
+        <![CDATA[ LEFT(create_time,10) >= #{ orderForm.qryStartDate}
+        and LEFT(create_time,10) <= #{ orderForm.qryEndDate}
+        and op_user= #{ orderForm.opUser}
+        GROUP BY LEFT(create_time,10)
+        order by create_time desc
+        ]]>) T
+    </select>
+
+    <select id="pageNormalQueryByDate" resultType="com.hx.med.sys.entity.Order">
+        select * from drug_order where
+        <![CDATA[ create_time > '#{ orderForm.qryStartDate}'
+        and create_time < '#{ orderForm.qryStartDate}'
+        limit #{ orderForm.start},#{ orderForm.length} ]]>
+    </select>
+
+    <select id="pageNormalCountQueryByDate" resultType="Integer">
         select count(*) from drug_order where
-        <![CDATA[ create_time > #{ orderForm.qryStartDate}
-        and create_time < #{ orderForm.qryEndDate}
-]]>
+        <![CDATA[ create_time > '#{ orderForm.qryStartDate}'
+        and create_time < '#{ orderForm.qryStartDate}'
+        limit #{ orderForm.start},#{ orderForm.length} ]]>
     </select>
 
     <insert id="insert">
