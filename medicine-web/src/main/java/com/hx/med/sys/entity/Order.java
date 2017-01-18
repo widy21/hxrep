@@ -9,6 +9,7 @@ public class Order {
 
     private Integer id;
     private Integer opUser;
+    private String opUserName;
     //应收
     private Double receivableAmount;
     //实收
@@ -20,10 +21,26 @@ public class Order {
     //税额
     private Double tax;
     //金额
-    private Double amount;
+    private Double reduceTaxAmount;
     //销售详情
     private String sellDetails;
     private Date createTime;
+
+    public String getOpUserName() {
+        return opUserName;
+    }
+
+    public void setOpUserName(String opUserName) {
+        this.opUserName = opUserName;
+    }
+
+    public Double getReduceTaxAmount() {
+        return reduceTaxAmount;
+    }
+
+    public void setReduceTaxAmount(Double reduceTaxAmount) {
+        this.reduceTaxAmount = reduceTaxAmount;
+    }
 
     public Integer getId() {
         return id;
@@ -79,14 +96,6 @@ public class Order {
 
     public void setTax(Double tax) {
         this.tax = tax;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
     }
 
     public String getSellDetails() {

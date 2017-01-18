@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.hx.med.common.util.PageUtil;
 import com.hx.med.sys.dao.DrugDao;
 import com.hx.med.sys.dao.OrderDao;
+import com.hx.med.sys.dao.UserDao;
 import com.hx.med.sys.entity.Order;
 import com.hx.med.sys.entity.User;
 import com.hx.med.sys.exception.BusinessException;
@@ -36,6 +37,9 @@ public class OrderServiceImpl implements OrderService{
 
     @Autowired
     OrderDao orderDao;
+
+    @Autowired
+    UserDao userDao;
 
     @Autowired
     private DrugService drugService;
@@ -81,7 +85,15 @@ public class OrderServiceImpl implements OrderService{
     public Map queryOrderByDate(OrderForm orderForm) throws BusinessException {
         Map resultMap = new HashMap();
         try{
+            int start = (orderForm.getCurrentPage()-1)*orderForm.getPageSize();
+            orderForm.setStart(start);
             List<Order> orders = orderDao.pageQueryByDate(orderForm);
+            for (Order order : orders) {
+                User user  = userDao.getUserById(order.getOpUser());
+                if(user != null){
+                    order.setOpUserName(user.getUserName());
+                }
+            }
             Integer recordNum = orderDao.pageCountQueryByDate(orderForm);
             PageUtil pageUtil = new PageUtil(10, recordNum, orderForm.getCurrentPage());
             resultMap.put("orders", orders);
@@ -92,6 +104,7 @@ public class OrderServiceImpl implements OrderService{
         }catch (Exception e){
             logger.debug("queryOrderByDate error :{}",e.getMessage());
             resultMap.put("opt_flag","false");
+            e.printStackTrace();
             throw new BusinessException("queryOrderByDate error :"+e.getMessage());
         }
         return resultMap;

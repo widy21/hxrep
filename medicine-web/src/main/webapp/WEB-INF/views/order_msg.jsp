@@ -10,14 +10,27 @@
 
     <!-- Bootstrap -->
     <link href="<%=request.getContextPath()%>/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="<%=request.getContextPath()%>/js/jquery-1.9.1.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="<%=request.getContextPath()%>/js/bootstrap.min.js"></script>
     <script src="<%=request.getContextPath()%>/js/jquery.twbsPagination.js" type="text/javascript"></script>
+    <script src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
+    <script src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.fr.js" type="text/javascript"></script>
+    <script src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
     <script>
         $(document).ready(function(){
-            $("#qry_btn").click(initDrugData);
+
+            $('.date_format').datetimepicker({
+                language:'zh-CN',
+                todayHighlight:true,
+                weekStart:1,
+                inline:true,
+                minView:'month',
+                autoclose:true,
+                format: 'yyyy-mm-dd'      /*此属性是显示顺序，还有显示顺序是mm-dd-yyyy*/
+            });
 
             var initDrugData =function() {
                 //重置分页组件否则保留上次查询的，一般来说很多问题出现与这三行代码有关如：虽然数据正确但是页码不对仍然为上一次查询出的一致
@@ -38,8 +51,7 @@
                         "qryStartDate": $("#qryStartDate").val(),
                         "qryEndDate": $("#qryEndDate").val(),
                         "opUser": $("#opUser").val(),
-                        "currentPage": obj.page_num,
-                        "start": $("#start").val()
+                        "currentPage": pagenow
                     }
                     $.ajax({
                         type: "POST",  //提交方式
@@ -49,27 +61,26 @@
                         'data': JSON.stringify(data),
                         success : function(data) {
                             var htmlobj = "";
-                            totalPage = data.page.totalPage;//将后台数据复制给总页数
-                            totalcount = data.page.totalCount;
-                            $("#userlogbody").empty();
-                            $.each(data.userlog, function(index, userlog) {
-                                htmlobj = htmlobj + "<tr>"
-                                + "<td><input type='checkbox'/></td>" + "<td>"
-                                + userlog.toUserName + "</td>" + "<td>"
-                                + userlog.fromUserName + "</td>" + "<td>"
-                                + userlog.createTime + "</td>" + "<td>"
-                                + userlog.eventType + "</td>" ;
-                                if(userlog.eventType=="LOCATION"){
-                                    htmlobj = htmlobj + "<td><button name="+ userlog.eventType
-                                    + " location='"+userlog.details+"' class='btn btn-danger btn-lg  btn-sm no-radius' data-toggle='modal' data-target='#myModal' onclick='showmodal(this)' >"
-                                    + "<i class='glyphicon glyphicon-map-marker'>  LOCATION</i></button></td>";
-                                }else{
-                                    htmlobj = htmlobj +"<td>"+ userlog.details + "</td>";
-                                };
+                            console.log(data);
+                            totalPage = data.pageCount;//将后台数据复制给总页数
+                            totalcount = data.recordNum;
+                            $("#drug_tab tr:gt(0)").empty();
+                            $.each(data.orders, function(index, order) {
+                                htmlobj = htmlobj + "<tr><td>"
+                                + (index+1) + "</td><td>"
+                                + order.receivableAmount + "</td><td>"
+                                + order.paidAmount + "</td><td>"
+                                + order.costAmount + "</td><td>"
+                                + order.grossProfit + "</td><td>"
+                                + order.tax + "</td><td>"
+                                + order.reduceTaxAmount + "</td><td>"
+                                + order.opUserName + "</td><td>"
+                                + order.createTime + "</td><td>"
+                                + "订单详情</td>"
 
                                 htmlobj = htmlobj + "</tr>";
 
-                                $("#userlogbody").append(htmlobj);
+                                $("#drug_tab").append(htmlobj);
                                 htmlobj = "";
 
                             });
@@ -78,6 +89,10 @@
                                 visiblecount = totalPage;
                             }
                             $('#pagination-log').twbsPagination({
+                                first:'首页',
+                                prev:'上一页',
+                                next:'下一页',
+                                last:'尾页',
                                 totalPages : totalPage,
                                 visiblePages : visiblecount,
                                 version : '1.1',
@@ -95,13 +110,14 @@
                         error : function(e) {
                             alert("s数据访问失败")
                         }
-
                     });
                 }
                 //函数初始化是调用内部函数
                 loaddata();
             }
-            });
+
+            $("#qry_btn").click(initDrugData);
+        });
     </script>
     <style>
         body{
@@ -120,12 +136,12 @@
     <form role="form" class="form-inline" style="align-content: center;width: 100%;">
         <div class="form-group">
             <label for="qryStartDate">开始时间</label>
-            <input type="text" id="qryStartDate" class="form-control">
+            <input type="text" id="qryStartDate" class="form-control date_format" value="">
         </div>
 
         <div class="form-group">
             <label for="qryEndDate">结束时间</label>
-            <input type="text" id="qryEndDate" class="form-control">
+            <input type="text" id="qryEndDate" class="form-control date_format" value="">
 
 
         </div>

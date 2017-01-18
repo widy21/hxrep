@@ -24,4 +24,5 @@ public interface UserService {
      * @throws BusinessException
      */
     List<User> getAllUsers() throws BusinessException;
+
 }

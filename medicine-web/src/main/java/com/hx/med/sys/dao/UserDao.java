@@ -13,4 +13,6 @@ public interface UserDao {
     User query(@Param("loginForm")LoginForm loginForm);
 
     List<User> getAllUsers();
+
+    User getUserById(@Param("uid") Integer uid);
 }

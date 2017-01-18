@@ -32,9 +32,13 @@ public class OrderForm {
 
     private Integer start;
 
-    private Integer length;
+    private static final Integer pageSize = 10;
 
     private Integer opUser;
+
+    public static Integer getPageSize() {
+        return pageSize;
+    }
 
     public Integer getCurrentPage() {
         return currentPage;
@@ -66,14 +70,6 @@ public class OrderForm {
 
     public void setStart(Integer start) {
         this.start = start;
-    }
-
-    public Integer getLength() {
-        return length;
-    }
-
-    public void setLength(Integer length) {
-        this.length = length;
     }
 
     public Integer getId() {

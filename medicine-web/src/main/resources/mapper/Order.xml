@@ -4,16 +4,16 @@
 
     <select id="pageQueryByDate" resultType="com.hx.med.sys.entity.Order">
         select * from drug_order where
-        <![CDATA[ create_time > '#{ orderForm.qryStartDate}'
-        and create_time < '#{ orderForm.qryStartDate}'
-        limit #{ orderForm.start},#{ orderForm.length} ]]>
+        <![CDATA[ create_time > #{ orderForm.qryStartDate}
+        and create_time < #{ orderForm.qryEndDate}
+        limit #{ orderForm.start},#{ orderForm.pageSize}]]>
     </select>
 
     <select id="pageCountQueryByDate" resultType="Integer">
         select count(*) from drug_order where
-        <![CDATA[ create_time > '#{ orderForm.qryStartDate}'
-        and create_time < '#{ orderForm.qryStartDate}'
-        limit #{ orderForm.start},#{ orderForm.length} ]]>
+        <![CDATA[ create_time > #{ orderForm.qryStartDate}
+        and create_time < #{ orderForm.qryEndDate}
+]]>
     </select>
 
     <insert id="insert">

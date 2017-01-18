@@ -11,6 +11,10 @@
         select * from user;
     </select>
 
+    <select id="getUserById" resultType="com.hx.med.sys.entity.User">
+        select * from user where id = #{uid};
+    </select>
+
     <update id="update">
         update user set `name`=#{name} where `id`=1
     </update>
