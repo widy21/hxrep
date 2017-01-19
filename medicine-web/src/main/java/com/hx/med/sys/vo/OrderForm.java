@@ -26,10 +26,8 @@ public class OrderForm {
     //销售详情
     private String sellDetails;
 
-    @NotEmpty
     private String qryStartDate;
 
-    @NotEmpty
     private String qryEndDate;
 
     private Integer currentPage;

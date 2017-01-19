@@ -19,7 +19,9 @@
     <script src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
     <script src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.fr.js" type="text/javascript"></script>
     <script src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
+    <script src="<%=request.getContextPath()%>/js/jquery.validate.min.js" type="text/javascript"></script>
     <script src="<%=request.getContextPath()%>/js/dateutil.js" type="text/javascript"></script>
+    <script src="<%=request.getContextPath()%>/js/xdate.js" type="text/javascript"></script>
     <script>
         $(document).ready(function(){
 
@@ -81,8 +83,7 @@
                                 + order.tax + "</td><td>"
                                 + order.reduceTaxAmount + "</td><td>"
                                 + order.opUserName + "</td><td>"
-                                + order.createTime.substring(0,10) + "</td><td>"
-                                + "订单详情</td>"
+                                + order.createTime.substring(0,10) + "</td>"
 
                                 htmlobj = htmlobj + "</tr>";
 
@@ -90,6 +91,11 @@
                                 htmlobj = "";
 
                             });
+
+                            if(data.orders.length == 0){
+                                $("#drug_tab").append("<tr><td colspan='9' align='center' style='color:red;font-size:14px'>无记录。</td></tr>");
+                            }
+
                             //后台总页数与可见页数比较如果小于可见页数则可见页数设置为总页数，
                             if (totalPage < visiblecount) {
                                 visiblecount = totalPage;
@@ -140,7 +146,9 @@
                     }
                 },
                 errorPlacement:function(error,element){
-                    error.appendTo(element.parent());
+                    console.log(element.attr('id'));
+                    $('#'+element.attr('id')+'_errorinfo').append(error);
+                    console.log(error.innerText);
                 }
             }
 
@@ -171,12 +179,13 @@
     <form role="form" id="qry_form" class="form-inline" style="align-content: center;width: 100%;">
         <div class="form-group">
             <label for="qryStartDate">开始时间</label>
-            <input type="text" id="qryStartDate" class="form-control date_format" value="" readonly>
+            <input type="text" id="qryStartDate" name="qryStartDate" class="form-control date_format" value="" readonly>
+            <label id="qryStartDate_errorinfo"><label>
         </div>
 
         <div class="form-group">
             <label for="qryEndDate">结束时间</label>
-            <input type="text" id="qryEndDate" class="form-control date_format" value="" readonly>
+            <input type="text" id="qryEndDate" name="qryEndDate" class="form-control date_format" value="" readonly>
 
 
         </div>
@@ -202,7 +211,6 @@
         <th>扣税金额</th>
         <th>业务员</th>
         <th>创建时间</th>
-        <th>操作</th>
     </table>
     <span style="font-size:14px;"><div class="text-center">
         <ul id="pagination-log" class="pagination-sm"></ul>

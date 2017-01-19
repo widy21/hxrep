@@ -102,6 +102,15 @@
         <property name="messageSource" ref="messageSource"/>
     </bean>
 
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/med/*"/>
+            <mvc:exclude-mapping path="/med/showloginpage"/>
+            <mvc:exclude-mapping path="/med/login"/>
+            <bean class="com.hx.med.common.filters.SecurityFilter"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
     <!--扫描web相关的bean-->
     <context:component-scan base-package="com.hx.med.sys.api"/>
     <context:component-scan base-package="com.hx.med.sys.validator"/>

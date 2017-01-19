@@ -74,7 +74,7 @@ public class OrderController {
     @ResponseBody
     @RequestMapping(value = "/order_checkout", method = RequestMethod.POST)
     public Object orderCheckout(@RequestBody @FluentValid final OrderForm orderForm) throws BusinessException {
-        Map resultMap = orderService.generateOrder(orderForm);
+         Map resultMap = orderService.generateOrder(orderForm);
         return resultMap;
     }
 
