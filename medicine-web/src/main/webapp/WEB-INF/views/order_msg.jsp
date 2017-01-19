@@ -19,6 +19,7 @@
     <script src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.js" type="text/javascript"></script>
     <script src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.fr.js" type="text/javascript"></script>
     <script src="<%=request.getContextPath()%>/js/bootstrap-datetimepicker.zh-CN.js" type="text/javascript"></script>
+    <script src="<%=request.getContextPath()%>/js/dateutil.js" type="text/javascript"></script>
     <script>
         $(document).ready(function(){
 
@@ -31,6 +32,11 @@
                 autoclose:true,
                 format: 'yyyy-mm-dd'      /*此属性是显示顺序，还有显示顺序是mm-dd-yyyy*/
             });
+
+            var initDate = function(){
+                $("#qryStartDate").val(Utils.DateUtils.firstDateOfMonth(new Date()));
+                $("#qryEndDate").val(Utils.DateUtils.endDateOfMonth(new Date()));
+            }
 
             var initDrugData =function() {
                 //重置分页组件否则保留上次查询的，一般来说很多问题出现与这三行代码有关如：虽然数据正确但是页码不对仍然为上一次查询出的一致
@@ -116,7 +122,36 @@
                 loaddata();
             }
 
-            $("#qry_btn").click(initDrugData);
+            var validate_config = {
+                rules: {
+                    qryStartDate: {
+                        required: true
+                    },
+                    qryEndDate: {
+                        required: true
+                    }
+                },
+                messages: {
+                    qryStartDate: {
+                        required: "请输入开始日期"
+                    },
+                    qryEndDate: {
+                        required: "请输入结束日期"
+                    }
+                },
+                errorPlacement:function(error,element){
+                    error.appendTo(element.parent());
+                }
+            }
+
+            $("#qry_btn").click(function(){
+                if(!$("#qry_form").validate(validate_config).form()){
+                    return false;
+                }
+                initDrugData();
+            });
+
+            initDate();
         });
     </script>
     <style>
@@ -133,7 +168,7 @@
 
 <body>
 <div align="center" id="main_div">
-    <form role="form" class="form-inline" style="align-content: center;width: 100%;">
+    <form role="form" id="qry_form" class="form-inline" style="align-content: center;width: 100%;">
         <div class="form-group">
             <label for="qryStartDate">开始时间</label>
             <input type="text" id="qryStartDate" class="form-control date_format" value="">

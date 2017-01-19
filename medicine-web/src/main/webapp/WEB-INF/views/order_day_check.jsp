@@ -81,7 +81,7 @@
                 if(ev.keyCode==13) {
                     qryFun();
                     $("#sellNum").val('0');
-                    $("#sellNum").focus();
+                    $("#sellNum").select();
                     $("#costAmount").val('');
                     $("#sellAmount").val('');
                 }
