@@ -95,8 +95,18 @@ public class OrderServiceImpl implements OrderService{
                 }
             }
             Integer recordNum = orderDao.pageCountQueryByDate(orderForm);
+            //统计查询
+            Order totalOrder = orderDao.totalQueryByDate(orderForm);
+            if(totalOrder != null){
+                User user  = userDao.getUserById(totalOrder.getOpUser());
+                if(user != null){
+                    totalOrder.setOpUserName(user.getName());
+                }
+            }
+
             PageUtil pageUtil = new PageUtil(10, recordNum, orderForm.getCurrentPage());
             resultMap.put("orders", orders);
+            resultMap.put("totalOrder", totalOrder);
             resultMap.put("recordNum", recordNum);
             resultMap.put("currentPage", orderForm.getCurrentPage());
             resultMap.put("pageCount", pageUtil.getPageCount());

@@ -16,6 +16,9 @@
     <script src="<%=request.getContextPath()%>/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function () {
+
+            $("#drugNo").focus();
+
             $("#save_new_drug").click(function () {
                 data = {
                     "drugNoAdd": $("#drugNoAdd").val(),
@@ -77,13 +80,21 @@
             //$("#drugQryBtn").click(qryFun);
 
             document.onkeydown = function(e){
+                //console.log(e);
                 var ev = document.all ? window.event : e;
                 if(ev.keyCode==13) {
-                    qryFun();
-                    $("#sellNum").val('0');
-                    $("#sellNum").select();
-                    $("#costAmount").val('');
-                    $("#sellAmount").val('');
+                    if(e.srcElement.id=='drugNo'){
+                        qryFun();
+                        $("#sellNum").val('0');
+                        $("#sellNum").select();
+                        $("#costAmount").val('');
+                        $("#sellAmount").val('');
+                    }
+                    if(e.srcElement.id=='sellNum'){
+                        $("#sellNum").change();
+                        $("#add_row_btn").click();
+                    }
+
                 }
             }
 
@@ -116,7 +127,7 @@
                 $("#drug_tab").append(trHTML);
                 calculateTotalAmount();
                 $("#totalInfoForm").show();
-                $("#drugNo").focus();
+                $("#drugNo").select();
                 $(".del_row_btn").click(function () {
                     $(this).parent().parent().remove();
                     calculateTotalAmount();
@@ -185,12 +196,19 @@
                             alert("订单入库错误!");
                         } else {
                             alert("订单入库成功!");
-                            window.location.reload();
+                            clearform();
                         }
                     }
                 });
             });
         });
+
+        function clearform(){
+            $("#main_div input").val("");
+            $("#totalInfoForm input").val("");
+            $("#drug_tab tr:gt(0)").remove();
+            $("#drugNo").focus();
+        }
     </script>
 
     <style>

@@ -92,6 +92,21 @@
 
                             });
 
+                            $("#total_drug_tab tr:gt(0)").empty();
+                            var totalOrder = data.totalOrder;
+                            if(totalOrder != undefined){
+                                var total_htmlobj = "<tr><td>1</td><td>"
+                                        + totalOrder.receivableAmount + "</td><td>"
+                                        + totalOrder.paidAmount + "</td><td>"
+                                        + totalOrder.costAmount + "</td><td>"
+                                        + totalOrder.grossProfit + "</td><td>"
+                                        + totalOrder.tax + "</td><td>"
+                                        + totalOrder.reduceTaxAmount + "</td><td>"
+                                        + totalOrder.opUserName + "</td></tr>";
+
+                                $("#total_drug_tab").append(total_htmlobj);
+                            }
+
                             if(data.orders.length == 0){
                                 $("#drug_tab").append("<tr><td colspan='9' align='center' style='color:red;font-size:14px'>无记录。</td></tr>");
                             }
@@ -201,6 +216,7 @@
     </form>
 </div>
 <div>
+    <h3>详细数据</h3>
     <table class="table" id="drug_tab">
         <th>行号</th>
         <th>应收金额</th>
@@ -215,6 +231,19 @@
     <span style="font-size:14px;"><div class="text-center">
         <ul id="pagination-log" class="pagination-sm"></ul>
     </div></span>
+</div>
+<div>
+    <h3>汇总数据</h3>
+    <table class="table" id="total_drug_tab">
+        <th>行号</th>
+        <th>应收金额</th>
+        <th>实收金额</th>
+        <th>成本金额</th>
+        <th>毛利</th>
+        <th>税额</th>
+        <th>扣税金额</th>
+        <th>业务员</th>
+    </table>
 </div>
 </body>
 </html>

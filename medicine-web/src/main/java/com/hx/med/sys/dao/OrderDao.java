@@ -13,6 +13,13 @@ public interface OrderDao {
     void insert(@Param("orderForm") OrderForm orderForm);
 
     /**
+     * 统计查询
+     * @param orderForm
+     * @return
+     */
+    Order totalQueryByDate(@Param("orderForm") OrderForm orderForm);
+
+    /**
      * 汇总查询明细
      * @param orderForm
      * @return
