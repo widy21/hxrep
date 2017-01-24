@@ -78,4 +78,11 @@ public class DrugController {
         return resultMap;
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/get_drug_spell_info", method = RequestMethod.POST)
+    public Object getDrugSpellInfo() throws BusinessException {
+        Map resultMap = drugService.getDrugSpellInfo();
+        return resultMap;
+    }
+
 }

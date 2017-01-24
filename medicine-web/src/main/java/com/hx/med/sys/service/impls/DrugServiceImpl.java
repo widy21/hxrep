@@ -1,5 +1,6 @@
 package com.hx.med.sys.service.impls;
 
+import com.hx.med.sys.entity.DrugSpell;
 import com.hx.med.sys.entity.User;
 import com.hx.med.sys.exception.BusinessException;
 import com.hx.med.sys.dao.DrugDao;
@@ -75,6 +76,7 @@ public class DrugServiceImpl implements DrugService {
             resultMap.put("update_flag", "success");
         }catch (Exception e){
             resultMap.put("update_flag","false");
+            logger.debug("addDrugNum error : [{}]", e.getMessage());
             throw new BusinessException("addDrugNum error :"+e.getMessage());
         }
         return resultMap;
@@ -88,6 +90,7 @@ public class DrugServiceImpl implements DrugService {
             resultMap.put("update_flag", "success");
         }catch (Exception e){
             resultMap.put("update_flag","false");
+            logger.debug("updateDrug error : [{}]", e.getMessage());
             throw new BusinessException("updateDrug error :"+e.getMessage());
         }
         return resultMap;
@@ -103,7 +106,23 @@ public class DrugServiceImpl implements DrugService {
             resultMap.put("update_flag", "success");
         }catch (Exception e){
             resultMap.put("update_flag","false");
+            logger.debug("updateDrugStock error : [{}]", e.getMessage());
             throw new BusinessException("updateDrugStock error :"+e.getMessage());
+        }
+        return resultMap;
+    }
+
+    @Override
+    public Map getDrugSpellInfo() throws BusinessException {
+        Map resultMap = new HashMap();
+        try{
+            List<DrugSpell> allDrugSpell = drugDao.queryAllDrugSpell();
+            resultMap.put("allDrugSpell", allDrugSpell);
+            resultMap.put("query_flag", "success");
+        }catch (Exception e){
+            resultMap.put("query_flag","false");
+            logger.debug("getDrugSpellInfo error : [{}]", e.getMessage());
+            throw new BusinessException("getDrugSpellInfo error :"+e.getMessage());
         }
         return resultMap;
     }

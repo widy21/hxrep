@@ -37,4 +37,11 @@ public interface DrugService {
      * @throws BusinessException
      */
     Map updateDrugStock(NewDrugForm[] newDrugForm) throws BusinessException;
+
+    /**
+     * 查询药品拼写信息
+     * @return
+     * @throws BusinessException
+     */
+    Map getDrugSpellInfo() throws BusinessException;
 }

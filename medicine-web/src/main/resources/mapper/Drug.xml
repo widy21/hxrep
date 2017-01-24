@@ -6,6 +6,10 @@
         select * from drugs where drug_no=#{drugNo}
     </select>
 
+    <select id="queryAllDrugSpell" resultType="com.hx.med.sys.entity.DrugSpell">
+        select * from drug_spell
+    </select>
+
     <insert id="insert">
         insert into drugs(`drug_no`,`drug_name`,`specification`,`origin`,`purchase_price`,`selling_price`,`create_time`) values(
         #{newDrugForm.drugNoAdd},#{newDrugForm.drugNameAdd},#{newDrugForm.drugSpeAdd},#{newDrugForm.drugOriginalAdd},

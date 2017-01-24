@@ -14,10 +14,55 @@
     <script src="<%=request.getContextPath()%>/js/jquery-1.9.1.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="<%=request.getContextPath()%>/js/bootstrap.min.js"></script>
+    <script src="<%=request.getContextPath()%>/js/bootstrap-typeahead.js"></script>
+    <script src="<%=request.getContextPath()%>/js/jquery.validate.min.js" type="text/javascript"></script>
     <script>
         $(document).ready(function () {
 
-            $("#drugNo").focus();
+            var name2Id = {};//对应关系对象
+            var spell_array = [];
+            var getSpellInfo = function(){
+                $.ajax({
+                    type: "POST",  //提交方式
+                    url: "${pageContext.request.contextPath}/med/get_drug_spell_info",
+                    'contentType': 'application/json',
+                    'dataType': 'json',
+                    success: function (result) {//返回数据根据结果进行相应的处理
+                        if (result.query_flag == "false") {
+                            alert("查询药品错误!");
+                        } else {
+                            var drugs = result.allDrugSpell;
+                            console.log(drugs.length);
+                            $.each(drugs, function (index, ele) {
+                                var key = ele.pinyin+' 【'+ele.drugName+'】';
+                                name2Id[key] = ele.drugNo;//键值对保存下来。
+                                spell_array.push(key);
+                            });
+                            $("#drugNo").focus();
+                        }
+                    },
+                    error: function (result) {
+                        console.log(result.responseText);
+                        alert("新增药品错误,请检查配置信息是否正确!");
+                    }
+                });
+            }
+
+            //加载拼写数据
+            getSpellInfo();
+
+            $('#drugNo').typeahead({
+                source: function (query, process) {
+                    process(spell_array);
+                },
+                updater: function (item) {
+                    console.log(name2Id[item]);//打印对应的id
+                    $("#drugNo").val(name2Id[item]);
+                    qryFun();
+                    return name2Id[item];
+                }
+
+            });
 
             $("#save_new_drug").click(function () {
                 data = {
@@ -111,6 +156,9 @@
             });
 
             $("#add_row_btn").click(function () {
+                if(!$("#qry_form").validate(validate_config).form()){
+                    return false;
+                }
                 if($("#sellAmount").val() == ''){
                     alert("请先输入药品编码进行查询&销售操作!");
                     return;
@@ -162,6 +210,9 @@
             });
 
             $("#confirm_btn").click(function(){
+                if(!$("#totalInfoForm").validate(validate_confirm_config).form()){
+                    return false;
+                }
                 var detailArray = [];
                 $("#drug_tab tr:gt(0)").each(function(){
                     var obj = {};
@@ -198,9 +249,63 @@
                             alert("订单入库成功!");
                             clearform();
                         }
+                    },
+                    error: function (result) {
+                        console.log(result.responseText);
+                        alert("订单入库错误,请检查配置信息是否正确!");
                     }
                 });
             });
+
+            var validate_config = {
+                rules: {
+                    sellNum:{
+                        required: true,
+                        positiveinteger:true
+                    },
+                    sellAmount:{
+                        number:true,
+                        required: true
+                    }
+                },
+                messages: {
+                    sellNum:{
+                        required: "请输入销售数量",
+                        positiveinteger:"销售数量必须为正整数"
+                    },
+                    sellAmount:{
+                        required: "请输入销售金额",
+                        number:"销售数量必须为数字"
+                    }
+                },
+                errorPlacement:function(error,element){
+                    console.log(element.attr('id'));
+                    $('#'+element.attr('id')+'_errorinfo').append(error);
+                    console.log(error.innerText);
+                }
+            }
+
+            var validate_confirm_config = {
+                rules: {
+                    acturalAmount:{
+                        required: true,
+                        number:true
+                    }
+                },
+                messages: {
+                    acturalAmount:{
+                        required: "请输入实收金额",
+                        number:"实收金额必须为数字"
+                    }
+                },
+                errorPlacement:function(error,element){
+                    console.log(element.attr('id'));
+                    $('#'+element.attr('id')+'_errorinfo').append(error);
+                    console.log(error.innerText);
+                }
+            }
+
+
         });
 
         function clearform(){
@@ -209,6 +314,11 @@
             $("#drug_tab tr:gt(0)").remove();
             $("#drugNo").focus();
         }
+
+        jQuery.validator.addMethod("positiveinteger", function(value, element) {
+            var aint=parseInt(value);
+            return aint>0&& (aint+"")==value;
+        }, "Please enter a valid number.");
     </script>
 
     <style>
@@ -225,12 +335,17 @@
         .input-width{
             width:200px;
         }
+
+        .error_info{
+            color: red;
+            font-weight: 100;
+        }
     </style>
 </head>
 
 <body>
 <div id="main_div">
-    <form role="form" class="form-inline" style="align-content: center;width:100%;">
+    <form role="form" id="qry_form" class="form-inline" style="align-content: center;width:100%;">
         <div class="form-group" style="min-width: 500px;margin-bottom:5px;">
             <label for="opUser">业务员&nbsp;&nbsp;&nbsp;</label>
             <select id="opUser"   class="form-control" style="min-width: 200px;">
@@ -271,7 +386,8 @@
         </div><hr>
         <div class="form-group">
             <label for="sellNum">销售数量</label>
-            <input type="text" id="sellNum" class="form-control">
+            <input type="text" id="sellNum" name="sellNum" class="form-control">
+            <label id="sellNum_errorinfo" class="error_info"><label>
         </div>
         <div class="form-group">
             <label for="costAmount">成本总额</label>
@@ -279,7 +395,8 @@
         </div><br>
         <div class="form-group">
             <label for="sellAmount">销售金额</label>
-            <input type="text" id="sellAmount" class="form-control" readonly>
+            <input type="text" id="sellAmount" name="sellAmount" class="form-control">
+            <label id="sellAmount_errorinfo" class="error_info"><label>
         </div>
         <button type="button" id="add_row_btn" class="btn btn-default">添加</button>
     </form>
@@ -306,7 +423,8 @@
         </div>
         <div class="form-group">
             <label for="acturalAmount">实收金额</label>
-            <input type="text" id="acturalAmount" class="form-control input-width">
+            <input type="text" id="acturalAmount" name="acturalAmount" class="form-control input-width">
+            <label id="acturalAmount_errorinfo" class="error_info"><label>
         </div><br>
         <div class="form-group">
             <label for="tax">税额</label>
