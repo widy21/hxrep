@@ -136,8 +136,10 @@
                         $("#sellAmount").val('');
                     }
                     if(e.srcElement.id=='sellNum'){
-                        $("#sellNum").change();
-                        $("#add_row_btn").click();
+                        var flag = $("#sellNum").change();
+                        if(!flag){
+                            $("#add_row_btn").click();
+                        }
                     }
 
                 }
@@ -146,7 +148,7 @@
             $("#sellNum").change(function(){
                 if(parseInt($(this).val())>parseInt($("#drugNumShow").val())){
                     alert("销售数量不能大于库存数量!");
-                    return;
+                    return false;
                 }
                 var costAmount = parseFloat($(this).val())*parseFloat($("#purchasePriceShow").val());
                 var amount = parseFloat($(this).val())*parseFloat($("#sellingPriceShow").val());
@@ -387,7 +389,7 @@
         <div class="form-group">
             <label for="sellNum">销售数量</label>
             <input type="text" id="sellNum" name="sellNum" class="form-control">
-            <label id="sellNum_errorinfo" class="error_info"><label>
+            <label id="sellNum_errorinfo" class="error_info"></label>
         </div>
         <div class="form-group">
             <label for="costAmount">成本总额</label>
@@ -396,7 +398,7 @@
         <div class="form-group">
             <label for="sellAmount">销售金额</label>
             <input type="text" id="sellAmount" name="sellAmount" class="form-control">
-            <label id="sellAmount_errorinfo" class="error_info"><label>
+            <label id="sellAmount_errorinfo" class="error_info"></label>
         </div>
         <button type="button" id="add_row_btn" class="btn btn-default">添加</button>
     </form>
@@ -424,7 +426,7 @@
         <div class="form-group">
             <label for="acturalAmount">实收金额</label>
             <input type="text" id="acturalAmount" name="acturalAmount" class="form-control input-width">
-            <label id="acturalAmount_errorinfo" class="error_info"><label>
+            <label id="acturalAmount_errorinfo" class="error_info"></label>
         </div><br>
         <div class="form-group">
             <label for="tax">税额</label>

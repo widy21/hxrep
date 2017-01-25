@@ -6,6 +6,7 @@ import com.hx.med.sys.exception.BusinessException;
 import com.hx.med.sys.service.interfaces.DrugService;
 import com.hx.med.sys.service.interfaces.UserService;
 import com.hx.med.sys.vo.NewDrugForm;
+import com.hx.med.sys.vo.QryDrugForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +84,26 @@ public class DrugController {
     public Object getDrugSpellInfo() throws BusinessException {
         Map resultMap = drugService.getDrugSpellInfo();
         return resultMap;
+    }
+
+    /**
+     * 药品分页查询
+     * @return
+     * @throws BusinessException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/drug_page_qry", method = RequestMethod.POST)
+    public Object orderQry(@RequestBody @FluentValid final QryDrugForm qryDrugForm) throws BusinessException {
+        Map resultMap = drugService.queryDrugByCondition(qryDrugForm);
+        return resultMap;
+    }
+
+    @RequestMapping(value = "/show_drug_msg", method = RequestMethod.GET)
+    public Object showDrugMsg(HttpServletRequest request) throws BusinessException {
+        Map<String, Object> model = new HashMap<String, Object>();
+        List<User> allUsers = userService.getAllUsers();
+        model.put("allUsers", allUsers);
+        return new ModelAndView("drug_msg",model);
     }
 
 }

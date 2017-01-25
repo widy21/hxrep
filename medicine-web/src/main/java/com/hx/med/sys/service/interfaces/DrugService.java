@@ -3,6 +3,7 @@ package com.hx.med.sys.service.interfaces;
 import com.hx.med.sys.entity.User;
 import com.hx.med.sys.exception.BusinessException;
 import com.hx.med.sys.vo.NewDrugForm;
+import com.hx.med.sys.vo.QryDrugForm;
 
 import java.util.List;
 import java.util.Map;
@@ -20,11 +21,11 @@ public interface DrugService {
 
     /**
      * 分页查询药品信息
-     * @param newDrugForm
+     * @param qryDrugForm
      * @return
      * @throws BusinessException
      */
-    Map queryDrugByPage(NewDrugForm newDrugForm) throws BusinessException;
+    Map queryDrugByCondition(QryDrugForm qryDrugForm) throws BusinessException;
 
     Map addDrugNum(NewDrugForm newDrugForm) throws BusinessException;
 
