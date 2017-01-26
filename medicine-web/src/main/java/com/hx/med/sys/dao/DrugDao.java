@@ -13,6 +13,8 @@ public interface DrugDao {
 
     void insert(@Param("newDrugForm") NewDrugForm newDrugForm);
 
+    void insertDrugSpell(@Param("newDrugForm") NewDrugForm newDrugForm);
+
     Drug query(@Param("drugNo") String drugNo);
 
     List<DrugSpell> queryAllDrugSpell();

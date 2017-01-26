@@ -37,6 +37,7 @@ public class DrugServiceImpl implements DrugService {
         Map resultMap = new HashMap();
         try{
             drugDao.insert(newDrugForm);
+            drugDao.insertDrugSpell(newDrugForm);
             resultMap.put("update_flag", "success");
         }catch (Exception e){
             logger.debug("saveNewDrug error : [{}]", e.getMessage());

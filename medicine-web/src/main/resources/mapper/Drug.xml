@@ -16,6 +16,11 @@
         #{newDrugForm.price},#{newDrugForm.drugSellPriceAdd},now());
     </insert>
 
+    <insert id="insertDrugSpell">
+        insert into drug_spell(`drug_no`,`drug_name`,`pinyin`) values(
+        #{newDrugForm.drugNoAdd},#{newDrugForm.drugNameAdd},to_pinyin(#{newDrugForm.drugNameAdd}));
+    </insert>
+
     <update id="updateDrugNum">
         update drugs set number = number + #{drugForm.number} where drug_no = #{drugForm.drugNoAdd};
     </update>

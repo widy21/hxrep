@@ -74,6 +74,9 @@
             });
 
             $("#save_new_drug").click(function () {
+                if(!$("#add_drug_form").validate(validate_add_config).form()){
+                    return false;
+                }
                 data = {
                     "drugNoAdd": $("#drugNoAdd").val(),
                     "drugOriginalAdd": $("#drugOriginalAdd").val(),
@@ -96,6 +99,7 @@
                         } else {
                             alert("新增药品成功!");
                             $("#myModal").modal("hide");
+                            window.location.reload();
                         }
                     },
                     error: function (result) {
@@ -187,6 +191,9 @@
             }
 
             $("#edit_drug").click(function () {
+                if(!$("#edit_drug_form").validate(validate_edit_config).form()){
+                    return false;
+                }
                 data = {
                     "drugNoAdd": $("#drugNoEdit").val(),
                     "drugOriginalAdd": $("#drugOriginalEdit").val(),
@@ -270,6 +277,118 @@
                     },
                     drugNo:{
                         required: "请输入药品编号"
+                    }
+                },
+                errorPlacement:function(error,element){
+                    console.log(element.attr('id'));
+                    $('#'+element.attr('id')+'_errorinfo').append(error);
+                    console.log(error.innerText);
+                }
+            }
+
+            var validate_add_config = {
+                rules: {
+                    drugNoAdd: {
+                        required: true
+                    },
+                    drugNameAdd: {
+                        required: true
+                    },
+                    drugSpeAdd: {
+                        required: true
+                    },
+                    drugOriginalAdd: {
+                        required: true
+                    },
+                    drugPriceAdd: {
+                        required: true,
+                        number:true
+                    },
+                    drugSellPriceAdd:{
+                        required: true,
+                        number:true
+                    }
+                },
+                messages: {
+                    drugNoAdd: {
+                        required: "必填选项"
+                    },
+                    drugNameAdd:{
+                        required: "必填选项"
+                    },
+                    drugSpeAdd:{
+                        required: "必填选项"
+                    },
+                    drugOriginalAdd:{
+                        required: "必填选项"
+                    },
+                    drugPriceAdd:{
+                        required: "必填选项",
+                        number: "必须为数字"
+                    },
+                    drugSellPriceAdd:{
+                        required: "必填选项",
+                        number: "必须为数字"
+                    }
+                },
+                errorPlacement:function(error,element){
+                    console.log(element.attr('id'));
+                    $('#'+element.attr('id')+'_errorinfo').append(error);
+                    console.log(error.innerText);
+                }
+            }
+
+            var validate_edit_config = {
+                rules: {
+                    drugNoEdit: {
+                        required: true
+                    },
+                    drugNameEdit: {
+                        required: true
+                    },
+                    drugSpeEdit: {
+                        required: true
+                    },
+                    drugOriginalEdit: {
+                        required: true
+                    },
+                    purchasePriceEdit: {
+                        required: true,
+                        number: true
+                    },
+                    drugNumEdit: {
+                        required: true,
+                        number: true
+                    },
+                    sellingPriceEdit:{
+                        required: true,
+                        number: true
+                    }
+                },
+                messages: {
+                    drugNoEdit: {
+                        required: "必填选项"
+                    },
+                    drugNameEdit:{
+                        required: "必填选项"
+                    },
+                    drugSpeEdit:{
+                        required: "必填选项"
+                    },
+                    drugOriginalEdit:{
+                        required: "必填选项"
+                    },
+                    purchasePriceEdit:{
+                        required: "必填选项",
+                        number: "必须为数字"
+                    },
+                    drugNumEdit:{
+                        required: "必填选项",
+                        number: "必须为数字"
+                    },
+                    sellingPriceEdit:{
+                        required: "必填选项",
+                        number: "必须为数字"
                     }
                 },
                 errorPlacement:function(error,element){
@@ -393,32 +512,37 @@
                 <h4 class="modal-title" id="myModalLabel">新增药品</h4>
             </div>
             <div class="modal-body">
-                <form role="form" class="form-inline" style="align-content: center;width: 100%;">
+                <form role="form" class="form-inline" id="add_drug_form" style="align-content: center;width: 100%;">
                     <div class="form-group">
                         <label for="drugNoAdd">药品编号</label>
-                        <input type="text" id="drugNoAdd" class="form-control">
-                        <span id="error_info" class="form-group"></span>
+                        <input type="text" id="drugNoAdd" name="drugNoAdd" class="form-control">
+                        <span id="drugNoAdd_errorinfo" class="error_info"></span>
                     </div>
 
                     <div class="form-group">
                         <label for="drugNameAdd">药品名称</label>
-                        <input type="text" id="drugNameAdd" class="form-control">
+                        <input type="text" id="drugNameAdd" name="drugNameAdd" class="form-control">
+                        <span id="drugNameAdd_errorinfo" class="error_info"></span>
                     </div>
                     <div class="form-group">
                         <label for="drugSpeAdd">药品规格</label>
-                        <input type="text" id="drugSpeAdd" class="form-control">
+                        <input type="text" id="drugSpeAdd" name="drugSpeAdd" class="form-control">
+                        <span id="drugSpeAdd_errorinfo" class="error_info"></span>
                     </div>
                     <div class="form-group">
                         <label for="drugOriginalAdd">药品产地</label>
-                        <input type="text" id="drugOriginalAdd" class="form-control">
+                        <input type="text" id="drugOriginalAdd" name="drugOriginalAdd" class="form-control">
+                        <span id="drugOriginalAdd_errorinfo" class="error_info"></span>
                     </div>
                     <div class="form-group">
                         <label for="drugPriceAdd">含税进价</label>
-                        <input type="text" id="drugPriceAdd" class="form-control">
+                        <input type="text" id="drugPriceAdd" name="drugPriceAdd" class="form-control">
+                        <span id="drugPriceAdd_errorinfo" class="error_info"></span>
                     </div>
                     <div class="form-group">
                         <label for="drugSellPriceAdd">零售价格</label>
-                        <input type="text" id="drugSellPriceAdd" class="form-control">
+                        <input type="text" id="drugSellPriceAdd" name="drugSellPriceAdd" class="form-control">
+                        <span id="drugSellPriceAdd_errorinfo" class="error_info"></span>
                     </div>
                 </form>
             </div>
@@ -440,7 +564,7 @@
                 <h4 class="modal-title">药品信息修改</h4>
             </div>
             <div class="modal-body">
-                <form role="form" class="form-inline" style="align-content: center;width: 100%;">
+                <form role="form" class="form-inline" id="edit_drug_form" style="align-content: center;width: 100%;">
                     <div class="form-group">
                         <label for="drugNoEdit">药品编号</label>
                         <input type="text" id="drugNoEdit" class="form-control" readonly>
@@ -448,27 +572,33 @@
 
                     <div class="form-group">
                         <label for="drugNameEdit">药品名称</label>
-                        <input type="text" id="drugNameEdit" class="form-control">
+                        <input type="text" id="drugNameEdit" name="drugNameEdit" class="form-control">
+                        <span id="drugNameEdit_errorinfo" class="error_info"></span>
                     </div>
                     <div class="form-group">
                         <label for="drugSpeEdit">药品规格</label>
-                        <input type="text" id="drugSpeEdit" class="form-control">
+                        <input type="text" id="drugSpeEdit" name="drugSpeEdit" class="form-control">
+                        <span id="drugSpeEdit_errorinfo" class="error_info"></span>
                     </div>
                     <div class="form-group">
                         <label for="drugOriginalEdit">药品产地</label>
-                        <input type="text" id="drugOriginalEdit" class="form-control">
+                        <input type="text" id="drugOriginalEdit" name="drugOriginalEdit" class="form-control">
+                        <span id="drugOriginalEdit_errorinfo" class="error_info"></span>
                     </div>
                     <div class="form-group">
                         <label for="purchasePriceEdit">含税进价</label>
-                        <input type="text" id="purchasePriceEdit" class="form-control">
+                        <input type="text" id="purchasePriceEdit" name="purchasePriceEdit" class="form-control">
+                        <span id="purchasePriceEdit_errorinfo" class="error_info"></span>
                     </div>
                     <div class="form-group">
                         <label for="sellingPriceEdit">零售价格</label>
-                        <input type="text" id="sellingPriceEdit" class="form-control">
+                        <input type="text" id="sellingPriceEdit" name="sellingPriceEdit" class="form-control">
+                        <span id="sellingPriceEdit_errorinfo" class="error_info"></span>
                     </div>
                     <div class="form-group">
                         <label for="drugNumEdit">药品库存</label>
-                        <input type="text" id="drugNumEdit" class="form-control">
+                        <input type="text" id="drugNumEdit" name="drugNumEdit" class="form-control">
+                        <span id="drugNumEdit_errorinfo" class="error_info"></span>
                     </div>
                 </form>
             </div>
