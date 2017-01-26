@@ -17,18 +17,18 @@
     </insert>
 
     <update id="updateDrugNum">
-        update drugs set number = number + #{qryDrugForm.number} where drug_no = #{qryDrugForm.drugNoAdd};
+        update drugs set number = number + #{drugForm.number} where drug_no = #{drugForm.drugNoAdd};
     </update>
 
     <update id="updateDrug">
-        update drugs set drug_name = #{qryDrugForm.drugNameAdd},specification = #{qryDrugForm.drugSpeAdd},
-         origin = #{qryDrugForm.drugOriginalAdd},selling_price=#{qryDrugForm.drugSellPriceAdd},purchase_price=#{qryDrugForm.price},
-         number = #{qryDrugForm.number} where drug_no = #{qryDrugForm.drugNoAdd};
+        update drugs set drug_name = #{drugForm.drugNameAdd},specification = #{drugForm.drugSpeAdd},
+         origin = #{drugForm.drugOriginalAdd},selling_price=#{drugForm.drugSellPriceAdd},purchase_price=#{drugForm.price},
+         number = #{drugForm.number} where drug_no = #{drugForm.drugNoAdd};
     </update>
 
     <update id="updateDrugStock">
-        update drugs set number = number - #{qryDrugForm.number}
-         where drug_no = #{qryDrugForm.drugNoAdd};
+        update drugs set number = number - #{drugForm.number}
+         where drug_no = #{drugForm.drugNoAdd};
     </update>
 
     <select id="pageQueryByCondition" resultType="com.hx.med.sys.entity.Drug">

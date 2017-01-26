@@ -18,7 +18,8 @@
     <script src="<%=request.getContextPath()%>/js/jquery.validate.min.js" type="text/javascript"></script>
     <script>
         $(document).ready(function () {
-
+            var qry_drug_info = {};
+            var add_drug_info = {};
             var name2Id = {};//对应关系对象
             var spell_array = [];
             var getSpellInfo = function(){
@@ -118,6 +119,8 @@
                             $("#purchasePriceShow").val(drug.purchasePrice);
                             $("#drugNumShow").val(drug.number);
                             $("#sellingPriceShow").val(drug.sellingPrice);
+                            //添加查询成功药品信息
+                            qry_drug_info[$("#drugNo").val()] = $("#drugNumShow").val();
                         }
                     }
                 });
@@ -157,6 +160,18 @@
                 $("#add_row_btn").focus();
             });
 
+            var isEnableSellNum = function(offset){
+                var key = $("#drugNo").val();
+                var drug_number = qry_drug_info[key];
+                var sell_number = add_drug_info[key];
+                console.log('drug_number='+drug_number);
+                console.log('sell_number='+(sell_number+offset));
+                if(parseInt(sell_number+offset)>parseInt(drug_number)){
+                    return false;
+                }
+                return true;
+            }
+
             $("#add_row_btn").click(function () {
                 if(!$("#qry_form").validate(validate_config).form()){
                     return false;
@@ -165,6 +180,21 @@
                     alert("请先输入药品编码进行查询&销售操作!");
                     return;
                 }
+                //判断药品总库存是否大于药品库存
+                var offset = parseInt($("#sellNum").val());
+                if(!isEnableSellNum(offset)){
+                    alert("添加药品总销量大于药品库存,请检查销售数量配置!");
+                    return false;
+                }
+                //添加判断成功药品销量
+                var key = $("#drugNo").val();
+                console.log('添加前销量：'+add_drug_info[key]);
+                if(add_drug_info[key]==undefined){
+                    add_drug_info[key] = offset;
+                }else{
+                    add_drug_info[key] = parseInt(add_drug_info[key])+offset;
+                }
+                console.log('添加后销量：'+add_drug_info[key]);
                 var trHTML = "<tr><td>"
                         +$("#drugNo").val()+"</td><td>"
                         +$("#drugNameShow").val()+"</td><td>"
@@ -182,6 +212,8 @@
                     $(this).parent().parent().remove();
                     calculateTotalAmount();
                 });
+
+
             });
 
             function calculateTotalAmount(){
