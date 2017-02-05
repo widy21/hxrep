@@ -29,5 +29,7 @@ public interface DrugDao {
 
     Integer pageCountQueryByCondition(@Param("qryDrugForm")QryDrugForm qryDrugForm);
 
+    Double queryTotalFeeByCondition(@Param("qryDrugForm")QryDrugForm qryDrugForm);
+
 
 }

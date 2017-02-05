@@ -74,11 +74,13 @@ public class DrugServiceImpl implements DrugService {
             qryDrugForm.setStart(start);
             List<Drug> drugs = drugDao.pageQueryByCondition(qryDrugForm);
             Integer recordNum = drugDao.pageCountQueryByCondition(qryDrugForm);
+            Double totalFee = drugDao.queryTotalFeeByCondition(qryDrugForm);
             PageUtil pageUtil = new PageUtil(10, recordNum, qryDrugForm.getCurrentPage());
             resultMap.put("drugs", drugs);
             resultMap.put("recordNum", recordNum);
             resultMap.put("currentPage", qryDrugForm.getCurrentPage());
             resultMap.put("pageCount", pageUtil.getPageCount());
+            resultMap.put("totalFee", totalFee);
         }catch (Exception e){
             resultMap.put("query_flag","false");
             logger.debug("queryDrugByCondition error : [{}]", e.getMessage());

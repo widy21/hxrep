@@ -135,4 +135,53 @@
         </where>
     </select>
 
+    <select id="queryTotalFeeByCondition" resultType="Double">
+        select sum(purchase_price) from drugs
+        <where>
+            <![CDATA[
+              number>0
+            ]]>
+            <if test="qryDrugForm.qryStartDate != null and qryDrugForm.qryEndDate != null">
+                <![CDATA[
+                and
+                LEFT(create_time,10) >= #{ qryDrugForm.qryStartDate}
+                and
+                LEFT(create_time,10) <= #{ qryDrugForm.qryEndDate}
+                ]]>
+            </if>
+            <if test="qryDrugForm.drugNo != null and qryDrugForm.drugNo != ''">
+                <![CDATA[
+                and
+                drug_no = #{qryDrugForm.drugNo}
+                ]]>
+            </if>
+            <if test="qryDrugForm.drugName != null and qryDrugForm.drugName != ''">
+                <bind name="pattern" value="'%' + qryDrugForm.drugName + '%'" />
+                <![CDATA[
+                and
+                drug_name like #{pattern}
+                ]]>
+            </if>
+            <if test="qryDrugForm.drugSpe != null and qryDrugForm.drugSpe != ''">
+                <![CDATA[
+                and
+                specification = #{qryDrugForm.drugSpe}
+                ]]>
+            </if>
+            <if test="qryDrugForm.drugOriginal != null and qryDrugForm.drugOriginal != ''">
+                <bind name="pattern" value="'%' + qryDrugForm.drugOriginal + '%'" />
+                <![CDATA[
+                and
+                origin = #{pattern}
+                ]]>
+            </if>
+            <if test="qryDrugForm.number != null and qryDrugForm.number != ''">
+                <![CDATA[
+                and
+                number = #{qryDrugForm.number}
+                ]]>
+            </if>
+        </where>
+    </select>
+
 </mapper>
