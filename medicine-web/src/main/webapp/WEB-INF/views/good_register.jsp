@@ -180,7 +180,7 @@
                          return false;
                          }
                          */
-                        $("#drugNum").focus();
+                        $("#drugNum").focus().select();
                         qryFun();
                     }
                     if(e.srcElement.id=='drugNum'){
@@ -249,7 +249,8 @@
                             alert("库存增加失败!");
                         } else {
                             alert("库存增加成功!");
-                            //$("#drugNum").val('0');
+                            $("#drugNum").val('0');
+                            $("#drugNo").select();
                             qryFun();
                         }
                     },
