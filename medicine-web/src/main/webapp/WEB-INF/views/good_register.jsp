@@ -74,6 +74,7 @@
             });
 
             $("#save_new_drug").click(function () {
+                $(this).attr({"disabled":"disabled"});
                 if(!$("#add_drug_form").validate(validate_add_config).form()){
                     return false;
                 }
@@ -93,6 +94,7 @@
                     'data': JSON.stringify(data),
                     //数据，这里使用的是Json格式进行传输
                     success: function (result) {//返回数据根据结果进行相应的处理
+                        $(this).removeAttr("disabled");//将按钮可用
                         if (result.update_flag == "false") {
                             alert("新增药品错误!");
                             $("#myModal").modal("hide");
@@ -105,6 +107,7 @@
                     error: function (result) {
                         console.log(result.responseText);
                         alert("新增药品错误,请检查配置信息是否正确!");
+                        $("#save_new_drug").removeAttr("disabled");//将按钮可用
                     }
                 });
             });
@@ -265,7 +268,7 @@
                 rules: {
                     drugNum: {
                         required: true,
-                        digits:true
+                        number:true
                     },
                     drugNo:{
                         required: true
@@ -274,7 +277,7 @@
                 messages: {
                     drugNum: {
                         required: "请输入进货数量",
-                        digits:"进货数量必须为数字"
+                        number:"进货数量必须为数字"
                     },
                     drugNo:{
                         required: "请输入药品编号"
