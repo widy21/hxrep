@@ -74,10 +74,10 @@
             });
 
             $("#save_new_drug").click(function () {
-                $(this).attr({"disabled":"disabled"});
                 if(!$("#add_drug_form").validate(validate_add_config).form()){
                     return false;
                 }
+                $(this).attr({"disabled":"disabled"});
                 data = {
                     "drugNoAdd": $("#drugNoAdd").val(),
                     "drugOriginalAdd": $("#drugOriginalAdd").val(),

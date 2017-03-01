@@ -295,7 +295,7 @@
                 rules: {
                     sellNum:{
                         required: true,
-                        positiveinteger:true
+                        number:true
                     },
                     sellAmount:{
                         number:true,
@@ -305,7 +305,7 @@
                 messages: {
                     sellNum:{
                         required: "请输入销售数量",
-                        positiveinteger:"销售数量必须为正整数"
+                        number:"销售数量必须为整数"
                     },
                     sellAmount:{
                         required: "请输入销售金额",
