@@ -459,10 +459,20 @@
             color: red;
             font-weight: 100;
         }
+        .layout-content-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #006dcc;
+            border-left: 5px solid #7c9be8;
+            padding-left: 10px;
+        }
     </style>
 </head>
 
 <body>
+<div class="layout-content-title">
+    <span class="layout-content-title">来货登记</span>
+</div>
 <div align="center" id="main_div">
     <form role="form" id="qry_form" class="form-inline" style="align-content: center;width: 100%;">
         <div class="form-group">

@@ -311,10 +311,16 @@
                 });
             });
 
+            jQuery.validator.addMethod("positiveinteger", function(value, element) {
+                var aint=parseInt(value);
+                return aint>0&& (aint+"")==value;
+            }, "Please enter a valid number.");
+
             var validate_config = {
                 rules: {
                     sellNum:{
                         required: true,
+                        positiveinteger:true,
                         number:true
                     },
                     sellAmount:{
@@ -325,6 +331,7 @@
                 messages: {
                     sellNum:{
                         required: "请输入销售数量",
+                        positiveinteger:"请输入正整数",
                         number:"销售数量必须为整数"
                     },
                     sellAmount:{
@@ -394,10 +401,20 @@
             color: red;
             font-weight: 100;
         }
+        .layout-content-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #006dcc;
+            border-left: 5px solid #7c9be8;
+            padding-left: 10px;
+        }
     </style>
 </head>
 
 <body>
+<div class="layout-content-title">
+    <span class="layout-content-title">订单日结</span>
+</div>
 <div id="main_div">
     <form role="form" id="qry_form" class="form-inline" style="align-content: center;width:100%;">
         <div class="form-group" style="min-width: 500px;margin-bottom:5px;">
