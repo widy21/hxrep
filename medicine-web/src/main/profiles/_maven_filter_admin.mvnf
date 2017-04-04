@@ -1,0 +1,7 @@
+#jdbc配置
+jdbc.url=jdbc:mysql://192.168.199.179:3306/med?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+jdbc.user=root
+jdbc.passwd=admin123
+
+#log配置文件
+log.level=debug
