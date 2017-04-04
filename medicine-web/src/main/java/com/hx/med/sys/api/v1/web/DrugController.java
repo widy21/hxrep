@@ -106,4 +106,12 @@ public class DrugController {
         return new ModelAndView("drug_msg",model);
     }
 
+    @RequestMapping(value = "/show_menu", method = RequestMethod.GET)
+    public Object showMenu(HttpServletRequest request) throws BusinessException {
+        Map<String, Object> model = new HashMap<String, Object>();
+//        List<User> allUsers = userService.getAllUsers();
+//        model.put("allUsers", allUsers);
+        return new ModelAndView("menu",model);
+    }
+
 }
