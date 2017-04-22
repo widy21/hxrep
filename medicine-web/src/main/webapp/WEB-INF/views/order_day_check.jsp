@@ -41,11 +41,11 @@
                             });
                             $("#drugNo").focus();
                         }
-                    },
+                    }/*,
                     error: function (result) {
                         console.log(result.responseText);
-                        alert("新增药品错误,请检查配置信息是否正确!");
-                    }
+                        alert("查询药品错误,请检查配置信息是否正确!");
+                    }*/
                 });
             }
 
@@ -320,7 +320,6 @@
                 rules: {
                     sellNum:{
                         required: true,
-                        positiveinteger:true,
                         number:true
                     },
                     sellAmount:{
@@ -331,12 +330,11 @@
                 messages: {
                     sellNum:{
                         required: "请输入销售数量",
-                        positiveinteger:"请输入正整数",
                         number:"销售数量必须为整数"
                     },
                     sellAmount:{
                         required: "请输入销售金额",
-                        number:"销售数量必须为数字"
+                        number:"销售金额必须为数字"
                     }
                 },
                 errorPlacement:function(error,element){
@@ -412,9 +410,6 @@
 </head>
 
 <body>
-<div class="layout-content-title">
-    <span class="layout-content-title">订单日结</span>
-</div>
 <div id="main_div">
     <form role="form" id="qry_form" class="form-inline" style="align-content: center;width:100%;">
         <div class="form-group" style="min-width: 500px;margin-bottom:5px;">

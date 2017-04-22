@@ -136,7 +136,7 @@
     </select>
 
     <select id="queryTotalFeeByCondition" resultType="Double">
-        select sum(purchase_price) from drugs
+        select sum(purchase_price*number) from drugs
         <where>
             <![CDATA[
               number>0

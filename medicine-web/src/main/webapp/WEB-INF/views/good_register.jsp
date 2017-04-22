@@ -40,11 +40,11 @@
                             });
                             $("#drugNo").focus();
                         }
-                    },
+                    }/*,
                     error: function (result) {
                         console.log(result.responseText);
                         alert("新增药品错误,请检查配置信息是否正确!");
-                    }
+                    }*/
                 });
             }
 
@@ -470,9 +470,6 @@
 </head>
 
 <body>
-<div class="layout-content-title">
-    <span class="layout-content-title">来货登记</span>
-</div>
 <div align="center" id="main_div">
     <form role="form" id="qry_form" class="form-inline" style="align-content: center;width: 100%;">
         <div class="form-group">
