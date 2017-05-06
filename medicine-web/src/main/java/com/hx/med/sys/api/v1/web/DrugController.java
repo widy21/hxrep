@@ -51,6 +51,11 @@ public class DrugController {
         }
     }
 
+    @RequestMapping(value = "/good_register_new", method = RequestMethod.GET)
+    public Object goodRegisterNew(HttpServletRequest request) throws BusinessException {
+        return new ModelAndView("good_register_new",null);
+    }
+
     @ResponseBody
     @RequestMapping(value = "/save_new_drug", method = RequestMethod.POST)
     public Object saveNewDrug(@RequestBody @FluentValid final NewDrugForm newDrugForm) throws BusinessException {

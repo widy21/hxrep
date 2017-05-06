@@ -94,6 +94,8 @@
                  };
                  closableTab.addTab(item);
              });
+            //默认打开tab页。
+            $("#systemSetting li").eq(1).find("a").click();
          });
 
         /*$(function(){
@@ -141,6 +143,7 @@
                     </a>
                     <ul id="systemSetting" class="nav nav-list collapse in secondmenu" style="height:0px;">
                         <li><a href="javascript:void(0)" onclick="return false;" tab_id="0" tab_url="good_register" target="iFrame1"><i class="glyphicon glyphicon-user"></i>来货登记</a></li>
+                        <li><a href="javascript:void(0)" onclick="return false;" tab_id="01" tab_url="good_register_new" target="iFrame1-2"><i class="glyphicon glyphicon-user"></i>来货批量登记</a></li>
                         <li><a href="javascript:void(0)" onclick="return false;" tab_id="1" tab_url="show_order_checkout" target="iFrame2"><i class="glyphicon glyphicon-euro"></i>订单日结</a></li>
                         <li><a href="javascript:void(0)" onclick="return false;" tab_id="2" tab_url="show_order_msg" target="iFrame3"><i class="glyphicon glyphicon-search"></i>订单信息查询</a></li>
                         <li><a href="javascript:void(0)" onclick="return false;" tab_id="3" tab_url="show_drug_msg" target="iFrame4"><i class="glyphicon glyphicon-zoom-in"></i>药品信息查询</a></li>
