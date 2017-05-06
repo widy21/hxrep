@@ -50,27 +50,6 @@
             //加载拼写数据
             getSpellInfo();
 
-            var add_item = function () {
-                var trHTML = "<tr><td>1</td>" +
-                        "<td><input class='drugNo' type='text' /></td>" +
-                        "<td></td>" +
-                        "<td></td>" +
-                        "<td></td>" +
-                        "<td></td>" +
-                        "<td></td>" +
-                        "<td></td>" +
-                        "<td>" +
-                        "<button type='button' class='btn btn-default add_item_btn' onclick='draw_tr(this)'>新增</button>" +
-                        "<button type='button' class='btn btn-default edit_btn'>修改</button>" +
-                        "</td></tr>"
-                $("#drug_tab").append(trHTML);
-            }
-
-            //add_item();
-
-//            $('.add_item_btn').click(function(){
-//
-//            });
             $('.drugNo').typeahead({
                 source: function (query, process) {
                     process(spell_array);
@@ -127,17 +106,6 @@
                 });
             });
 
-            var edit_func = function () {
-                $("#drugNoEdit").val($(this).attr('edit_drug_no'));
-                $("#drugOriginalEdit").val($(this).attr('edit_drug_origin'));
-                $("#drugNameEdit").val($(this).attr('edit_drug_name'));
-                $("#purchasePriceEdit").val($(this).attr('edit_drug_purchase_price'));
-                $("#sellingPriceEdit").val($(this).attr('edit_drug_sell_price'));
-                $("#drugNumEdit").val($(this).attr('edit_drug_num'));
-                $("#drugSpeEdit").val($(this).attr('edit_drug_spe'));
-                $("#editModal").modal("show");
-            }
-
             //$("#drugQryBtn").click(qryFun);
             document.onkeydown = function (e) {
                 var ev = document.all ? window.event : e;
@@ -175,7 +143,8 @@
                         } else {
                             alert("药品信息修改成功!");
                             $("#editModal").modal("hide");
-                            qryFun();
+                            var index = $("#drugEditIndex").val();
+                            qryFun($("#drugNoEdit").val(),index);
                         }
                     },
                     error: function (result) {
@@ -402,8 +371,9 @@
             $("#drug_tab").append($(obj).parent().parent().clone(false));
             var index = $("#drug_tab tr:last").index();
             console.log(index);
-            $("#drug_tab tr").eq(index).find("td").eq(8).find("input").attr("id", "registNo_" + index).focus();
+            $("#drug_tab tr").eq(index).find("td").eq(8).find("input").attr("id", "registNo_" + index);
             $("#drug_tab tr").eq(index).find("td").eq(0).text(index);
+            $("#drug_tab tr").eq(index).find("td").eq(1).find("input").focus();
 
             $('.drugNo').typeahead({
                 source: function (query, process) {
@@ -437,7 +407,17 @@
         //修改一行记录
         function edit_tr(obj) {
             var index = $(obj).parent().parent().index();
-            var drugNo = $("#registNo_"+index).val();
+//            var drugNo = $("#registNo_"+index).val();
+
+            $("#drugNoEdit").val($(obj).parent().parent().find("td").eq(1).find("input").val());
+            $("#drugOriginalEdit").val($(obj).parent().parent().find("td").eq(7).text());
+            $("#drugNameEdit").val($(obj).parent().parent().find("td").eq(2).text());
+            $("#purchasePriceEdit").val($(obj).parent().parent().find("td").eq(4).text());
+            $("#sellingPriceEdit").val($(obj).parent().parent().find("td").eq(5).text());
+            $("#drugNumEdit").val($(obj).parent().parent().find("td").eq(6).text());
+            $("#drugSpeEdit").val($(obj).parent().parent().find("td").eq(3).text());
+            $("#drugEditIndex").val(index);
+            $("#editModal").modal("show");
         }
 
 
@@ -506,9 +486,16 @@
 </head>
 
 <body>
+<br><br>
 <div>
-    <button type="button" id="add_btn" class="btn btn-primary btn-lg" style="float:right;" data-toggle="modal"
+    <button type="button" id="add_btn" class="btn btn-primary" style="float:right;" data-toggle="modal"
             data-target="#myModal">新增药品
+    </button>
+    <button type="button" id="batch_regist_btn" class="btn btn-primary" style="float:left;" data-toggle="modal"
+            data-target="#myModal">批量入库
+    </button>
+    <button type="button" id="batch_del_btn" class="btn btn-primary" style="float:left;" data-toggle="modal"
+            data-target="#myModal">全部删除
     </button>
     <table class="table" id="drug_tab">
         <tr>
@@ -644,6 +631,7 @@
                         <input type="text" id="drugNumEdit" name="drugNumEdit" class="form-control">
                         <span id="drugNumEdit_errorinfo" class="error_info"></span>
                     </div>
+                    <input type="hidden" id = 'drugEditIndex'/>
                 </form>
             </div>
             <div class="modal-footer">
