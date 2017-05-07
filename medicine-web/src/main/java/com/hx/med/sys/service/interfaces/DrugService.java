@@ -2,6 +2,7 @@ package com.hx.med.sys.service.interfaces;
 
 import com.hx.med.sys.entity.User;
 import com.hx.med.sys.exception.BusinessException;
+import com.hx.med.sys.vo.NewBatchDrugForm;
 import com.hx.med.sys.vo.NewDrugForm;
 import com.hx.med.sys.vo.QryDrugForm;
 
@@ -27,6 +28,12 @@ public interface DrugService {
      */
     Map queryDrugByCondition(QryDrugForm qryDrugForm) throws BusinessException;
 
+    /**
+     * 单个增加库存
+     * @param newDrugForm
+     * @return
+     * @throws BusinessException
+     */
     Map addDrugNum(NewDrugForm newDrugForm) throws BusinessException;
 
     Map updateDrug(NewDrugForm newDrugForm) throws BusinessException;
@@ -45,4 +52,11 @@ public interface DrugService {
      * @throws BusinessException
      */
     Map getDrugSpellInfo() throws BusinessException;
+
+    /**
+     * 批量增加库存
+     * @param newBatchDrugForms
+     * @return
+     */
+    Map batchAddDrugNum(NewBatchDrugForm[] newBatchDrugForms) throws BusinessException;
 }

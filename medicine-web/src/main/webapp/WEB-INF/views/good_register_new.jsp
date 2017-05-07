@@ -154,39 +154,63 @@
                 });
             });
 
-            $("#reg_btn").click(function () {
-                if (!$("#qry_form").validate(validate_config).form()) {
+            $("#batch_regist_btn").click(function () {
+                var drugNo = $("#drug_tab tr").eq(1).find("td").eq(1).find("input").val();
+                var registNum = $("#drug_tab tr").eq(1).find("td").eq(8).find("input").val();
+                if($.trim(drugNo) == '' || $.trim(registNum) == ''){
+                    alert('药品信息为空');
                     return false;
                 }
-                if ($('#drugNo_errorinfo').text() != '') {
+                if(isNaN(parseInt(registNum))){
+                    alert('进货数量输入错误');
                     return false;
                 }
-                data = {
-                    "drugNoAdd": $("#drugNo").val(),
-                    "number": $("#drugNum").val()
+
+                var regist_obj_array = [];
+                var check_flag = true;
+                $("#drug_tab tr:gt(0)").each(function(){
+                    var regist_obj = {};
+                    regist_obj.drug_no = $(this).find("td").eq(1).find("input").val();
+                    regist_obj.regist_num = $(this).find("td").eq(8).find("input").val();
+                    if(isNaN(parseInt(regist_obj.regist_num))){
+                        check_flag = false;
+                    }
+                    regist_obj_array.push(regist_obj);
+                });
+                if(!check_flag){
+                    alert('进货数量输入错误');
+                    return false;
                 }
+                console.log('regist_obj_array --> '+JSON.stringify(regist_obj_array));
                 $.ajax({
                     type: "POST",  //提交方式
-                    url: "${pageContext.request.contextPath}/med/add_drugNum",//路径
+                    url: "${pageContext.request.contextPath}/med/batch_add_drugNum",//路径
                     'contentType': 'application/json',
                     'dataType': 'json',
-                    'data': JSON.stringify(data),
                     //数据，这里使用的是Json格式进行传输
+                    'data': JSON.stringify(regist_obj_array),
                     success: function (result) {//返回数据根据结果进行相应的处理
                         if (result.update_flag == "false") {
                             alert("库存增加失败!");
                         } else {
                             alert("库存增加成功!");
-                            $("#drugNum").val('0');
-                            $("#drugNo").select();
-                            qryFun();
+//                            $("#drug_tab tr:gt(1)").remove();
+                            window.location.reload();
                         }
                     },
                     error: function (result) {
                         console.log(result.responseText);
-                        alert("库存增加错误,请检查配置信息是否正确!");
+                        alert("库存批量增加错误,请检查配置信息是否正确!");
                     }
                 });
+            });
+
+            //批量删除表格数据
+            $("#batch_del_btn").click(function () {
+//                $("#drug_tab tr:gt(1)").remove();
+//                $("#drug_tab input").val('');
+//                $("#drug_tab tr").eq(1).find("td:gt(1):lt(8)").text('');
+                window.location.reload();
             });
 
             var validate_config = {
@@ -367,13 +391,12 @@
         });
 
         function draw_tr(obj) {
-//            console.log($(obj).parent().parent().html());
             $("#drug_tab").append($(obj).parent().parent().clone(false));
             var index = $("#drug_tab tr:last").index();
             console.log(index);
             $("#drug_tab tr").eq(index).find("td").eq(8).find("input").attr("id", "registNo_" + index);
             $("#drug_tab tr").eq(index).find("td").eq(0).text(index);
-            $("#drug_tab tr").eq(index).find("td").eq(1).find("input").focus();
+            $("#drug_tab tr").eq(index).find("td").eq(1).find("input").focus().select();
 
             $('.drugNo').typeahead({
                 source: function (query, process) {
@@ -401,6 +424,8 @@
             //第一行需要被复制，不能删除
             if(index != 1){
                 $(obj).parent().parent().remove();
+            }else{
+                alert('第一行不能删除.');
             }
         }
 
@@ -408,8 +433,12 @@
         function edit_tr(obj) {
             var index = $(obj).parent().parent().index();
 //            var drugNo = $("#registNo_"+index).val();
-
-            $("#drugNoEdit").val($(obj).parent().parent().find("td").eq(1).find("input").val());
+            var drugNo = $(obj).parent().parent().find("td").eq(1).find("input").val();
+            if($.trim(drugNo) == ''){
+                alert('药品编码为空');
+                return false;
+            }
+            $("#drugNoEdit").val(drugNo);
             $("#drugOriginalEdit").val($(obj).parent().parent().find("td").eq(7).text());
             $("#drugNameEdit").val($(obj).parent().parent().find("td").eq(2).text());
             $("#purchasePriceEdit").val($(obj).parent().parent().find("td").eq(4).text());
@@ -447,7 +476,7 @@
                         $("#drug_tab tr").eq(index).find("td").eq(5).text(drug.sellingPrice);
                         $("#drug_tab tr").eq(index).find("td").eq(6).text(drug.number);
                         $("#drug_tab tr").eq(index).find("td").eq(7).text(drug.origin);
-                        $("#drug_tab tr").eq(index).find("td").eq(8).find("input").focus();
+                        $("#drug_tab tr").eq(index).find("td").eq(8).find("input").focus().select();
                     }
                 },
                 error: function (result) {
@@ -491,11 +520,9 @@
     <button type="button" id="add_btn" class="btn btn-primary" style="float:right;" data-toggle="modal"
             data-target="#myModal">新增药品
     </button>
-    <button type="button" id="batch_regist_btn" class="btn btn-primary" style="float:left;" data-toggle="modal"
-            data-target="#myModal">批量入库
+    <button type="button" id="batch_regist_btn" class="btn btn-primary" style="float:left;" data-toggle="modal">批量入库
     </button>
-    <button type="button" id="batch_del_btn" class="btn btn-primary" style="float:left;" data-toggle="modal"
-            data-target="#myModal">全部删除
+    <button type="button" id="batch_del_btn" class="btn btn-primary" style="float:left;margin-left: 10px;" data-toggle="modal">全部删除
     </button>
     <table class="table" id="drug_tab">
         <tr>
@@ -525,9 +552,9 @@
                 <input class='registNo' id='registNo_1' type='text' style="width: 62px;"/>
             </td>
             <td>
-                <button type='button' class='btn btn-default add_item_btn' onclick="draw_tr(this)">新增</button>
-                <button type='button' class='btn btn-default edit_btn' onclick="edit_tr(this)">修改</button>
-                <button type='button' class='btn btn-default del_btn' onclick="del_tr(this)">删除</button>
+                <button type='button' class='btn btn-default add_item_btn' onclick="draw_tr(this)"><i title="复制" class="glyphicon glyphicon-plus"></i></button>
+                <button type='button' class='btn btn-default edit_btn' onclick="edit_tr(this)"><i title="修改" class="glyphicon glyphicon-edit"></i></button>
+                <button type='button' class='btn btn-default del_btn' onclick="del_tr(this)"><i title="删除" class="glyphicon glyphicon-minus"></i></button>
             </td>
         </tr>
     </table>

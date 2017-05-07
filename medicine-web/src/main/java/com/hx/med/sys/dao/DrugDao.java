@@ -3,6 +3,7 @@ package com.hx.med.sys.dao;
 import com.hx.med.sys.entity.Drug;
 import com.hx.med.sys.entity.DrugSpell;
 import com.hx.med.sys.service.interfaces.DrugService;
+import com.hx.med.sys.vo.NewBatchDrugForm;
 import com.hx.med.sys.vo.NewDrugForm;
 import com.hx.med.sys.vo.QryDrugForm;
 import org.apache.ibatis.annotations.Param;
@@ -31,5 +32,5 @@ public interface DrugDao {
 
     Double queryTotalFeeByCondition(@Param("qryDrugForm")QryDrugForm qryDrugForm);
 
-
+    void batchAddDrugNum(@Param("newBatchDrugForm")NewBatchDrugForm newBatchDrugForms);
 }
