@@ -67,6 +67,21 @@
                 console.log($(this).parent().parent().index());
             });
 
+            $(".registNo").bind("input propertychange", function () {
+                var purchasePrice = parseFloat($(this).parent().parent().find("td").eq(4).text());
+                var registNum = parseInt($(this).val());
+//                console.log($(this).parent().parent().html());
+                console.log(purchasePrice);
+                console.log(registNum);
+                if ($.trim($(this).val()) != '' && isNaN(registNum)) {
+                    alert('进货数量输入错误');
+                    return false;
+                }
+                $(this).parent().parent().find("td").eq(9).text(parseFloat(purchasePrice * registNum).toFixed(2));
+                //计算总金额
+                caculateTotalAmount();
+            });
+
             $("#save_new_drug").click(function () {
                 if (!$("#add_drug_form").validate(validate_add_config).form()) {
                     return false;
@@ -144,7 +159,7 @@
                             alert("药品信息修改成功!");
                             $("#editModal").modal("hide");
                             var index = $("#drugEditIndex").val();
-                            qryFun($("#drugNoEdit").val(),index);
+                            qryFun($("#drugNoEdit").val(), index);
                         }
                     },
                     error: function (result) {
@@ -157,31 +172,31 @@
             $("#batch_regist_btn").click(function () {
                 var drugNo = $("#drug_tab tr").eq(1).find("td").eq(1).find("input").val();
                 var registNum = $("#drug_tab tr").eq(1).find("td").eq(8).find("input").val();
-                if($.trim(drugNo) == '' || $.trim(registNum) == ''){
+                if ($.trim(drugNo) == '' || $.trim(registNum) == '') {
                     alert('药品信息为空');
                     return false;
                 }
-                if(isNaN(parseInt(registNum))){
+                if (isNaN(parseInt(registNum))) {
                     alert('进货数量输入错误');
                     return false;
                 }
 
                 var regist_obj_array = [];
                 var check_flag = true;
-                $("#drug_tab tr:gt(0)").each(function(){
+                $("#drug_tab tr:gt(0)").each(function () {
                     var regist_obj = {};
                     regist_obj.drug_no = $(this).find("td").eq(1).find("input").val();
                     regist_obj.regist_num = $(this).find("td").eq(8).find("input").val();
-                    if(isNaN(parseInt(regist_obj.regist_num))){
+                    if (isNaN(parseInt(regist_obj.regist_num))) {
                         check_flag = false;
                     }
                     regist_obj_array.push(regist_obj);
                 });
-                if(!check_flag){
+                if (!check_flag) {
                     alert('进货数量输入错误');
                     return false;
                 }
-                console.log('regist_obj_array --> '+JSON.stringify(regist_obj_array));
+                console.log('regist_obj_array --> ' + JSON.stringify(regist_obj_array));
                 $.ajax({
                     type: "POST",  //提交方式
                     url: "${pageContext.request.contextPath}/med/batch_add_drugNum",//路径
@@ -416,17 +431,37 @@
 //                console.log($(this).parent().html());
                 console.log($(this).parent().parent().index());
             });
+
+            //计算总金额
+            caculateTotalAmount();
+
+            $(".registNo").bind("input propertychange", function () {
+                var purchasePrice = parseFloat($(this).parent().parent().find("td").eq(4).text());
+                var registNum = parseInt($(this).val());
+//                console.log($(this).parent().parent().html());
+                console.log(purchasePrice);
+                console.log(registNum);
+                if ($.trim($(this).val()) != '' && isNaN(registNum)) {
+                    alert('进货数量输入错误');
+                    return false;
+                }
+                $(this).parent().parent().find("td").eq(9).text(parseFloat(purchasePrice * registNum).toFixed(2));
+                //计算总金额
+                caculateTotalAmount();
+            });
         }
 
         //删除一行记录
         function del_tr(obj) {
             var index = $(obj).parent().parent().index();
             //第一行需要被复制，不能删除
-            if(index != 1){
+            if (index != 1) {
                 $(obj).parent().parent().remove();
-            }else{
+            } else {
                 alert('第一行不能删除.');
             }
+            //计算总金额
+            caculateTotalAmount();
         }
 
         //修改一行记录
@@ -434,7 +469,7 @@
             var index = $(obj).parent().parent().index();
 //            var drugNo = $("#registNo_"+index).val();
             var drugNo = $(obj).parent().parent().find("td").eq(1).find("input").val();
-            if($.trim(drugNo) == ''){
+            if ($.trim(drugNo) == '') {
                 alert('药品编码为空');
                 return false;
             }
@@ -485,7 +520,19 @@
                 }
             });
         }
-        ;
+
+        //计算总金额
+        function caculateTotalAmount(){
+            var total_amount = 0;
+            $("#drug_tab tr:gt(0)").each(function () {
+                var amount = parseFloat($(this).find("td").eq(9).text());
+                if (!isNaN(amount)) {
+                    total_amount += amount;
+                }
+            });
+            console.log(total_amount.toFixed(2));
+            $("#totalAmount").val(total_amount.toFixed(2));
+        }
     </script>
 
     <style>
@@ -516,13 +563,15 @@
 
 <body>
 <br><br>
+
 <div>
     <button type="button" id="add_btn" class="btn btn-primary" style="float:right;" data-toggle="modal"
             data-target="#myModal">新增药品
     </button>
     <button type="button" id="batch_regist_btn" class="btn btn-primary" style="float:left;" data-toggle="modal">批量入库
     </button>
-    <button type="button" id="batch_del_btn" class="btn btn-primary" style="float:left;margin-left: 10px;" data-toggle="modal">全部删除
+    <button type="button" id="batch_del_btn" class="btn btn-primary" style="float:left;margin-left: 10px;"
+            data-toggle="modal">全部删除
     </button>
     <table class="table" id="drug_tab">
         <tr>
@@ -535,6 +584,7 @@
             <th>库存</th>
             <th>产地</th>
             <th>进货数量</th>
+            <th>进货金额</th>
             <th>操作</th>
         </tr>
         <tr>
@@ -551,13 +601,23 @@
             <td>
                 <input class='registNo' id='registNo_1' type='text' style="width: 62px;"/>
             </td>
+            <td class='registAmount'></td>
             <td>
-                <button type='button' class='btn btn-default add_item_btn' onclick="draw_tr(this)"><i title="复制" class="glyphicon glyphicon-plus"></i></button>
-                <button type='button' class='btn btn-default edit_btn' onclick="edit_tr(this)"><i title="修改" class="glyphicon glyphicon-edit"></i></button>
-                <button type='button' class='btn btn-default del_btn' onclick="del_tr(this)"><i title="删除" class="glyphicon glyphicon-minus"></i></button>
+                <button type='button' class='btn btn-default add_item_btn' onclick="draw_tr(this)"><i title="复制"
+                                                                                                      class="glyphicon glyphicon-plus"></i>
+                </button>
+                <button type='button' class='btn btn-default edit_btn' onclick="edit_tr(this)"><i title="修改"
+                                                                                                  class="glyphicon glyphicon-edit"></i>
+                </button>
+                <button type='button' class='btn btn-default del_btn' onclick="del_tr(this)"><i title="删除"
+                                                                                                class="glyphicon glyphicon-minus"></i>
+                </button>
             </td>
         </tr>
     </table>
+    <div>
+        <span style="font-weight: 600;font-size: medium">进货总金额：</span><input type="text" id="totalAmount" readonly/>(元)
+    </div>
 </div>
 
 <!-- add Modal -->
@@ -658,7 +718,7 @@
                         <input type="text" id="drugNumEdit" name="drugNumEdit" class="form-control">
                         <span id="drugNumEdit_errorinfo" class="error_info"></span>
                     </div>
-                    <input type="hidden" id = 'drugEditIndex'/>
+                    <input type="hidden" id='drugEditIndex'/>
                 </form>
             </div>
             <div class="modal-footer">
