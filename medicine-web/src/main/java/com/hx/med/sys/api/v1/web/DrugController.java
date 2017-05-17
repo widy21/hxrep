@@ -5,6 +5,7 @@ import com.hx.med.sys.entity.User;
 import com.hx.med.sys.exception.BusinessException;
 import com.hx.med.sys.service.interfaces.DrugService;
 import com.hx.med.sys.service.interfaces.UserService;
+import com.hx.med.sys.vo.NewBatchDrugForm;
 import com.hx.med.sys.vo.NewDrugForm;
 import com.hx.med.sys.vo.QryDrugForm;
 import org.slf4j.Logger;
@@ -51,6 +52,11 @@ public class DrugController {
         }
     }
 
+    @RequestMapping(value = "/good_register_new", method = RequestMethod.GET)
+    public Object goodRegisterNew(HttpServletRequest request) throws BusinessException {
+        return new ModelAndView("good_register_new",null);
+    }
+
     @ResponseBody
     @RequestMapping(value = "/save_new_drug", method = RequestMethod.POST)
     public Object saveNewDrug(@RequestBody @FluentValid final NewDrugForm newDrugForm) throws BusinessException {
@@ -69,6 +75,13 @@ public class DrugController {
     @RequestMapping(value = "/add_drugNum", method = RequestMethod.POST)
     public Object addDrugNum(@RequestBody @FluentValid final NewDrugForm newDrugForm) throws BusinessException {
         Map resultMap = drugService.addDrugNum(newDrugForm);
+        return resultMap;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/batch_add_drugNum", method = RequestMethod.POST)
+    public Object batchAddDrugNum(@RequestBody @FluentValid final NewBatchDrugForm[] newBatchDrugForms) throws BusinessException {
+        Map resultMap = drugService.batchAddDrugNum(newBatchDrugForms);
         return resultMap;
     }
 
