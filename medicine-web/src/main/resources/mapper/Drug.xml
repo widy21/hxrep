@@ -25,6 +25,10 @@
         update drugs set number = number + #{drugForm.number} where drug_no = #{drugForm.drugNoAdd};
     </update>
 
+    <update id="batchAddDrugNum">
+        update drugs set number = number + #{newBatchDrugForm.regist_num} where drug_no = #{newBatchDrugForm.drug_no};
+    </update>
+
     <update id="updateDrug">
         update drugs set drug_name = #{drugForm.drugNameAdd},specification = #{drugForm.drugSpeAdd},
          origin = #{drugForm.drugOriginalAdd},selling_price=#{drugForm.drugSellPriceAdd},purchase_price=#{drugForm.price},
@@ -136,7 +140,7 @@
     </select>
 
     <select id="queryTotalFeeByCondition" resultType="Double">
-        select sum(purchase_price) from drugs
+        select sum(purchase_price*number) from drugs
         <where>
             <![CDATA[
               number>0

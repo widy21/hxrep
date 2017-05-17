@@ -41,11 +41,11 @@
                             });
                             $("#drugNo").focus();
                         }
-                    },
+                    }/*,
                     error: function (result) {
                         console.log(result.responseText);
-                        alert("新增药品错误,请检查配置信息是否正确!");
-                    }
+                        alert("查询药品错误,请检查配置信息是否正确!");
+                    }*/
                 });
             }
 
@@ -311,6 +311,11 @@
                 });
             });
 
+            jQuery.validator.addMethod("positiveinteger", function(value, element) {
+                var aint=parseInt(value);
+                return aint>0&& (aint+"")==value;
+            }, "Please enter a valid number.");
+
             var validate_config = {
                 rules: {
                     sellNum:{
@@ -329,7 +334,7 @@
                     },
                     sellAmount:{
                         required: "请输入销售金额",
-                        number:"销售数量必须为数字"
+                        number:"销售金额必须为数字"
                     }
                 },
                 errorPlacement:function(error,element){
@@ -393,6 +398,13 @@
         .error_info{
             color: red;
             font-weight: 100;
+        }
+        .layout-content-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #006dcc;
+            border-left: 5px solid #7c9be8;
+            padding-left: 10px;
         }
     </style>
 </head>

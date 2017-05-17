@@ -17,11 +17,10 @@
     <script src="<%=request.getContextPath()%>/js/jquery.json-2.2-min.js"></script>
     <script src="<%=request.getContextPath()%>/js/jquery.validate.min.js" type="text/javascript"></script>
     <script>
+        var name2Id = {};//对应关系对象
+        var spell_array = [];
         $(document).ready(function () {
-
-            var name2Id = {};//对应关系对象
-            var spell_array = [];
-            var getSpellInfo = function(){
+            var getSpellInfo = function () {
                 $.ajax({
                     type: "POST",  //提交方式
                     url: "${pageContext.request.contextPath}/med/get_drug_spell_info",
@@ -34,50 +33,60 @@
                             var drugs = result.allDrugSpell;
                             console.log(drugs.length);
                             $.each(drugs, function (index, ele) {
-                                var key = ele.pinyin+' 【'+ele.drugName+'】';
+                                var key = ele.pinyin + ' 【' + ele.drugName + '】';
                                 name2Id[key] = ele.drugNo;//键值对保存下来。
                                 spell_array.push(key);
                             });
                             $("#drugNo").focus();
                         }
                     }/*,
-                    error: function (result) {
-                        console.log(result.responseText);
-                        alert("新增药品错误,请检查配置信息是否正确!");
-                    }*/
+                     error: function (result) {
+                     console.log(result.responseText);
+                     alert("新增药品错误,请检查配置信息是否正确!");
+                     }*/
                 });
             }
 
             //加载拼写数据
             getSpellInfo();
 
-            $('#drugNo').typeahead({
+            $('.drugNo').typeahead({
                 source: function (query, process) {
                     process(spell_array);
                 },
-                /* matcher: function (obj) {
-                 console.log(obj);
-                 var item = obj;
-                 return item.name.toLowerCase().indexOf(this.query.toLowerCase())
-                 },
-
-                 highlighter: function(item) {
-                 return "==>" + item + "<==";
-                 },*/
                 updater: function (item) {
                     console.log(name2Id[item]);//打印对应的id
                     $("#drugNo").val(name2Id[item]);
-                    qryFun();
                     return name2Id[item];
                 }
+            });
 
+            $('.drugNo').change(function () {
+                var index = $(this).parent().parent().index();
+                qryFun($(this).val(), index);
+                console.log($(this).parent().parent().index());
+            });
+
+            $(".registNo").bind("input propertychange", function () {
+                var purchasePrice = parseFloat($(this).parent().parent().find("td").eq(4).text());
+                var registNum = parseInt($(this).val());
+//                console.log($(this).parent().parent().html());
+                console.log(purchasePrice);
+                console.log(registNum);
+                if ($.trim($(this).val()) != '' && isNaN(registNum)) {
+                    alert('进货数量输入错误');
+                    return false;
+                }
+                $(this).parent().parent().find("td").eq(9).text(parseFloat(purchasePrice * registNum).toFixed(2));
+                //计算总金额
+                caculateTotalAmount();
             });
 
             $("#save_new_drug").click(function () {
-                if(!$("#add_drug_form").validate(validate_add_config).form()){
+                if (!$("#add_drug_form").validate(validate_add_config).form()) {
                     return false;
                 }
-                $(this).attr({"disabled":"disabled"});
+                $(this).attr({"disabled": "disabled"});
                 data = {
                     "drugNoAdd": $("#drugNoAdd").val(),
                     "drugOriginalAdd": $("#drugOriginalAdd").val(),
@@ -112,89 +121,19 @@
                 });
             });
 
-            var qryFun = function () {
-                data = {
-                    "drugNoAdd": $("#drugNo").val()
-                }
-                $.ajax({
-                    type: "POST",  //提交方式
-                    url: "${pageContext.request.contextPath}/med/query_drug_byno",//路径
-                    'contentType': 'application/json',
-                    'dataType': 'json',
-                    'data': JSON.stringify(data),
-                    //数据，这里使用的是Json格式进行传输
-                    success: function (result) {//返回数据根据结果进行相应的处理
-                        if (result.query_flag == "none") {
-                            $("#drugNo_errorinfo").html("药品不存在!");
-                        } else if (result.query_flag == "false") {
-                            $("#drugNo_errorinfo").html("查询出错!");
-                        } else {
-                            //console.log(result.drug);
-                            $("#drugNo_errorinfo").empty();
-                            var drug = result.drug;
-                            $("#drug_tab tr:eq(1)").remove();
-                            var trHTML = "<tr><td>1</td><td>"
-                                    + drug.drugNo + "</td><td>"
-                                    + drug.drugName + "</td><td>"
-                                    + drug.specification + "</td><td>"
-                                    + drug.purchasePrice + "</td><td>"
-                                    + drug.sellingPrice + "</td><td>"
-                                    + drug.number + "</td><td>"
-                                    + drug.origin + "</td>"
-                                    + "<td><button type='button' " +
-                                    "edit_drug_no='" + drug.drugNo + "' " +
-                                    "edit_drug_origin='" + drug.origin + "' " +
-                                    "edit_drug_name='" + drug.drugName + "' " +
-                                    "edit_drug_spe='" + drug.specification + "' " +
-                                    "edit_drug_purchase_price='" + drug.purchasePrice + "' " +
-                                    "edit_drug_sell_price='" + drug.sellingPrice + "' " +
-                                    "edit_drug_num='" + drug.number + "' " +
-                                    "class='btn btn-default edit_btn'>修改</button></td></tr>"
-                            $("#drug_tab").append(trHTML);
-                            $(".edit_btn").click(edit_func);
-                        }
-                    },
-                    error: function (result) {
-                        console.log(result.responseText);
-                        alert("查询药品错误,请检查查询条件是否正确!");
-                    }
-                });
-            };
-
-            var edit_func = function () {
-                $("#drugNoEdit").val($(this).attr('edit_drug_no'));
-                $("#drugOriginalEdit").val($(this).attr('edit_drug_origin'));
-                $("#drugNameEdit").val($(this).attr('edit_drug_name'));
-                $("#purchasePriceEdit").val($(this).attr('edit_drug_purchase_price'));
-                $("#sellingPriceEdit").val($(this).attr('edit_drug_sell_price'));
-                $("#drugNumEdit").val($(this).attr('edit_drug_num'));
-                $("#drugSpeEdit").val($(this).attr('edit_drug_spe'));
-                $("#editModal").modal("show");
-            }
-
             //$("#drugQryBtn").click(qryFun);
             document.onkeydown = function (e) {
                 var ev = document.all ? window.event : e;
                 if (ev.keyCode == 13) {
                     console.log(e.srcElement.id);
-                    if(e.srcElement.id=='drugNo'){
-                        /*
-                         if(!$("#qry_form").validate(validate_drugno_config).form()){
-                         return false;
-                         }
-                         */
-                        $("#drugNum").focus().select();
-                        qryFun();
+                    if (e.srcElement.id.match('registNo_') != null) {
+                        draw_tr($("#drug_tab tr:last").find("td").eq(8).find("input"));
                     }
-                    if(e.srcElement.id=='drugNum'){
-                        $("#reg_btn").click();
-                    }
-
                 }
             }
 
             $("#edit_drug").click(function () {
-                if(!$("#edit_drug_form").validate(validate_edit_config).form()){
+                if (!$("#edit_drug_form").validate(validate_edit_config).form()) {
                     return false;
                 }
                 data = {
@@ -219,7 +158,8 @@
                         } else {
                             alert("药品信息修改成功!");
                             $("#editModal").modal("hide");
-                            qryFun();
+                            var index = $("#drugEditIndex").val();
+                            qryFun($("#drugNoEdit").val(), index);
                         }
                     },
                     error: function (result) {
@@ -229,63 +169,87 @@
                 });
             });
 
-            $("#reg_btn").click(function () {
-                if(!$("#qry_form").validate(validate_config).form()){
+            $("#batch_regist_btn").click(function () {
+                var drugNo = $("#drug_tab tr").eq(1).find("td").eq(1).find("input").val();
+                var registNum = $("#drug_tab tr").eq(1).find("td").eq(8).find("input").val();
+                if ($.trim(drugNo) == '' || $.trim(registNum) == '') {
+                    alert('药品信息为空');
                     return false;
                 }
-                if($('#drugNo_errorinfo').text()!=''){
+                if (isNaN(parseInt(registNum))) {
+                    alert('进货数量输入错误');
                     return false;
                 }
-                data = {
-                    "drugNoAdd": $("#drugNo").val(),
-                    "number": $("#drugNum").val()
+
+                var regist_obj_array = [];
+                var check_flag = true;
+                $("#drug_tab tr:gt(0)").each(function () {
+                    var regist_obj = {};
+                    regist_obj.drug_no = $(this).find("td").eq(1).find("input").val();
+                    regist_obj.regist_num = $(this).find("td").eq(8).find("input").val();
+                    if (isNaN(parseInt(regist_obj.regist_num))) {
+                        check_flag = false;
+                    }
+                    regist_obj_array.push(regist_obj);
+                });
+                if (!check_flag) {
+                    alert('进货数量输入错误');
+                    return false;
                 }
+                console.log('regist_obj_array --> ' + JSON.stringify(regist_obj_array));
                 $.ajax({
                     type: "POST",  //提交方式
-                    url: "${pageContext.request.contextPath}/med/add_drugNum",//路径
+                    url: "${pageContext.request.contextPath}/med/batch_add_drugNum",//路径
                     'contentType': 'application/json',
                     'dataType': 'json',
-                    'data': JSON.stringify(data),
                     //数据，这里使用的是Json格式进行传输
+                    'data': JSON.stringify(regist_obj_array),
                     success: function (result) {//返回数据根据结果进行相应的处理
                         if (result.update_flag == "false") {
                             alert("库存增加失败!");
                         } else {
                             alert("库存增加成功!");
-                            $("#drugNum").val('0');
-                            $("#drugNo").select();
-                            qryFun();
+//                            $("#drug_tab tr:gt(1)").remove();
+                            window.location.reload();
                         }
                     },
                     error: function (result) {
                         console.log(result.responseText);
-                        alert("库存增加错误,请检查配置信息是否正确!");
+                        alert("库存批量增加错误,请检查配置信息是否正确!");
                     }
                 });
+            });
+
+            //批量删除表格数据
+            $("#batch_del_btn").click(function () {
+//                $("#drug_tab tr:gt(1)").remove();
+//                $("#drug_tab input").val('');
+//                $("#drug_tab tr").eq(1).find("td:gt(1):lt(8)").text('');
+                window.location.reload();
             });
 
             var validate_config = {
                 rules: {
                     drugNum: {
                         required: true,
-                        number:true
+                        number: true
                     },
-                    drugNo:{
+                    drugNo: {
                         required: true
                     }
                 },
                 messages: {
                     drugNum: {
                         required: "请输入进货数量",
-                        number:"进货数量必须为数字"
+                        number: "进货数量必须为数字"
                     },
-                    drugNo:{
+                    drugNo: {
                         required: "请输入药品编号"
                     }
                 },
-                errorPlacement:function(error,element){
+                errorPlacement: function (error, element) {
                     console.log(element.attr('id'));
-                    $('#'+element.attr('id')+'_errorinfo').append(error);
+                    $('#' + element.attr('id') + '_errorinfo').append(error);
                     console.log(error.innerText);
                 }
             }
@@ -306,38 +270,38 @@
                     },
                     drugPriceAdd: {
                         required: true,
-                        number:true
+                        number: true
                     },
-                    drugSellPriceAdd:{
+                    drugSellPriceAdd: {
                         required: true,
-                        number:true
+                        number: true
                     }
                 },
                 messages: {
                     drugNoAdd: {
                         required: "必填选项"
                     },
-                    drugNameAdd:{
+                    drugNameAdd: {
                         required: "必填选项"
                     },
-                    drugSpeAdd:{
+                    drugSpeAdd: {
                         required: "必填选项"
                     },
-                    drugOriginalAdd:{
+                    drugOriginalAdd: {
                         required: "必填选项"
                     },
-                    drugPriceAdd:{
+                    drugPriceAdd: {
                         required: "必填选项",
                         number: "必须为数字"
                     },
-                    drugSellPriceAdd:{
+                    drugSellPriceAdd: {
                         required: "必填选项",
                         number: "必须为数字"
                     }
                 },
-                errorPlacement:function(error,element){
+                errorPlacement: function (error, element) {
                     console.log(element.attr('id'));
-                    $('#'+element.attr('id')+'_errorinfo').append(error);
+                    $('#' + element.attr('id') + '_errorinfo').append(error);
                     console.log(error.innerText);
                 }
             }
@@ -364,7 +328,7 @@
                         required: true,
                         number: true
                     },
-                    sellingPriceEdit:{
+                    sellingPriceEdit: {
                         required: true,
                         number: true
                     }
@@ -373,49 +337,49 @@
                     drugNoEdit: {
                         required: "必填选项"
                     },
-                    drugNameEdit:{
+                    drugNameEdit: {
                         required: "必填选项"
                     },
-                    drugSpeEdit:{
+                    drugSpeEdit: {
                         required: "必填选项"
                     },
-                    drugOriginalEdit:{
+                    drugOriginalEdit: {
                         required: "必填选项"
                     },
-                    purchasePriceEdit:{
+                    purchasePriceEdit: {
                         required: "必填选项",
                         number: "必须为数字"
                     },
-                    drugNumEdit:{
+                    drugNumEdit: {
                         required: "必填选项",
                         number: "必须为数字"
                     },
-                    sellingPriceEdit:{
+                    sellingPriceEdit: {
                         required: "必填选项",
                         number: "必须为数字"
                     }
                 },
-                errorPlacement:function(error,element){
+                errorPlacement: function (error, element) {
                     console.log(element.attr('id'));
-                    $('#'+element.attr('id')+'_errorinfo').append(error);
+                    $('#' + element.attr('id') + '_errorinfo').append(error);
                     console.log(error.innerText);
                 }
             }
 
             var validate_drugno_config = {
                 rules: {
-                    drugNo:{
+                    drugNo: {
                         required: true
                     }
                 },
                 messages: {
-                    drugNo:{
+                    drugNo: {
                         required: "请输入药品编号"
                     }
                 },
-                errorPlacement:function(error,element){
+                errorPlacement: function (error, element) {
                     console.log(element.attr('id'));
-                    $('#'+element.attr('id')+'_errorinfo').append(error);
+                    $('#' + element.attr('id') + '_errorinfo').append(error);
                     console.log(error.innerText);
                 }
             }
@@ -424,24 +388,151 @@
                 rules: {
                     drugNum: {
                         required: true,
-                        digits:true
+                        digits: true
                     }
                 },
                 messages: {
                     drugNum: {
                         required: "请输入进货数量",
-                        digits:"进货数量必须为数字"
+                        digits: "进货数量必须为数字"
                     }
                 },
-                errorPlacement:function(error,element){
+                errorPlacement: function (error, element) {
                     console.log(element.attr('id'));
-                    $('#'+element.attr('id')+'_errorinfo').append(error);
+                    $('#' + element.attr('id') + '_errorinfo').append(error);
                     console.log(error.innerText);
                 }
             }
-
         });
 
+        function draw_tr(obj) {
+            $("#drug_tab").append($(obj).parent().parent().clone(false));
+            var index = $("#drug_tab tr:last").index();
+            console.log(index);
+            $("#drug_tab tr").eq(index).find("td").eq(8).find("input").attr("id", "registNo_" + index);
+            $("#drug_tab tr").eq(index).find("td").eq(0).text(index);
+            $("#drug_tab tr").eq(index).find("td").eq(1).find("input").focus().select();
+
+            $('.drugNo').typeahead({
+                source: function (query, process) {
+                    process(spell_array);
+                },
+                updater: function (item) {
+                    console.log(name2Id[item]);//打印对应的id
+//                    $("#drugNo").val(name2Id[item]);
+                    var index = $(obj).parent().parent().index();
+                    return name2Id[item];
+                }
+            });
+
+            $('.drugNo').change(function () {
+                var index = $(this).parent().parent().index();
+                qryFun($(this).val(), index);
+//                console.log($(this).parent().html());
+                console.log($(this).parent().parent().index());
+            });
+
+            //计算总金额
+            caculateTotalAmount();
+
+            $(".registNo").bind("input propertychange", function () {
+                var purchasePrice = parseFloat($(this).parent().parent().find("td").eq(4).text());
+                var registNum = parseInt($(this).val());
+//                console.log($(this).parent().parent().html());
+                console.log(purchasePrice);
+                console.log(registNum);
+                if ($.trim($(this).val()) != '' && isNaN(registNum)) {
+                    alert('进货数量输入错误');
+                    return false;
+                }
+                $(this).parent().parent().find("td").eq(9).text(parseFloat(purchasePrice * registNum).toFixed(2));
+                //计算总金额
+                caculateTotalAmount();
+            });
+        }
+
+        //删除一行记录
+        function del_tr(obj) {
+            var index = $(obj).parent().parent().index();
+            //第一行需要被复制，不能删除
+            if (index != 1) {
+                $(obj).parent().parent().remove();
+            } else {
+                alert('第一行不能删除.');
+            }
+            //计算总金额
+            caculateTotalAmount();
+        }
+
+        //修改一行记录
+        function edit_tr(obj) {
+            var index = $(obj).parent().parent().index();
+//            var drugNo = $("#registNo_"+index).val();
+            var drugNo = $(obj).parent().parent().find("td").eq(1).find("input").val();
+            if ($.trim(drugNo) == '') {
+                alert('药品编码为空');
+                return false;
+            }
+            $("#drugNoEdit").val(drugNo);
+            $("#drugOriginalEdit").val($(obj).parent().parent().find("td").eq(7).text());
+            $("#drugNameEdit").val($(obj).parent().parent().find("td").eq(2).text());
+            $("#purchasePriceEdit").val($(obj).parent().parent().find("td").eq(4).text());
+            $("#sellingPriceEdit").val($(obj).parent().parent().find("td").eq(5).text());
+            $("#drugNumEdit").val($(obj).parent().parent().find("td").eq(6).text());
+            $("#drugSpeEdit").val($(obj).parent().parent().find("td").eq(3).text());
+            $("#drugEditIndex").val(index);
+            $("#editModal").modal("show");
+        }
+
+
+        function qryFun(drugNo, index) {
+            data = {
+                "drugNoAdd": drugNo
+            }
+            $.ajax({
+                type: "POST",  //提交方式
+                url: "${pageContext.request.contextPath}/med/query_drug_byno",//路径
+                'contentType': 'application/json',
+                'dataType': 'json',
+                'data': JSON.stringify(data),
+                //数据，这里使用的是Json格式进行传输
+                success: function (result) {//返回数据根据结果进行相应的处理
+                    if (result.query_flag == "none") {
+                        $("#drugNo_errorinfo").html("药品不存在!");
+                    } else if (result.query_flag == "false") {
+                        $("#drugNo_errorinfo").html("查询出错!");
+                    } else {
+                        console.log(result.drug);
+                        $("#drugNo_errorinfo").empty();
+                        var drug = result.drug;
+                        $("#drug_tab tr").eq(index).find("td").eq(2).text(drug.drugName);
+                        $("#drug_tab tr").eq(index).find("td").eq(3).text(drug.specification);
+                        $("#drug_tab tr").eq(index).find("td").eq(4).text(drug.purchasePrice);
+                        $("#drug_tab tr").eq(index).find("td").eq(5).text(drug.sellingPrice);
+                        $("#drug_tab tr").eq(index).find("td").eq(6).text(drug.number);
+                        $("#drug_tab tr").eq(index).find("td").eq(7).text(drug.origin);
+                        $("#drug_tab tr").eq(index).find("td").eq(8).find("input").focus().select();
+                    }
+                },
+                error: function (result) {
+                    console.log(result.responseText);
+                    alert("查询药品错误,请检查查询条件是否正确!");
+                }
+            });
+        }
+
+        //计算总金额
+        function caculateTotalAmount(){
+            var total_amount = 0;
+            $("#drug_tab tr:gt(0)").each(function () {
+                var amount = parseFloat($(this).find("td").eq(9).text());
+                if (!isNaN(amount)) {
+                    total_amount += amount;
+                }
+            });
+            console.log(total_amount.toFixed(2));
+            $("#totalAmount").val(total_amount.toFixed(2));
+        }
     </script>
 
     <style>
@@ -455,10 +546,11 @@
             /*background-color :;*/
         }
 
-        .error_info{
+        .error_info {
             color: red;
             font-weight: 100;
         }
+
         .layout-content-title {
             font-size: 16px;
             font-weight: 600;
@@ -470,47 +562,62 @@
 </head>
 
 <body>
-<div align="center" id="main_div">
-    <form role="form" id="qry_form" class="form-inline" style="align-content: center;width: 100%;">
-        <div class="form-group">
-            <label for="drugNo">药品编号</label>
+<br><br>
 
-            <input type="text" id="drugNo" name="drugNo" class="form-control" data-provide="typeahead">
-            <!--button type="button" id="drugQryBtn" class="btn btn-default">查询</button-->
-            <span id="drugNo_errorinfo" class="form-group error_info"></span>
-        </div>
-
-        <div class="form-group">
-            <label for="drugNum">进货数量</label>
-
-            <input type="text" id="drugNum" name="drugNum" class="form-control">
-            <label id="drugNum_errorinfo" class="error_info"><label>
-
-        </div>
-        <div class="form-group">
-            <label for="drugNum">业务员</label>
-
-            <input type="text" id="name" class="form-control" value="${requestScope.user.name}" readonly>
-
-        </div>
-        <button type="button" id="reg_btn" class="btn btn-default">录入</button>
-    </form>
-</div>
 <div>
-    <button type="button" id="add_btn" class="btn btn-primary btn-lg" style="float:right;" data-toggle="modal"
+    <button type="button" id="add_btn" class="btn btn-primary" style="float:right;" data-toggle="modal"
             data-target="#myModal">新增药品
     </button>
+    <button type="button" id="batch_regist_btn" class="btn btn-primary" style="float:left;" data-toggle="modal">批量入库
+    </button>
+    <button type="button" id="batch_del_btn" class="btn btn-primary" style="float:left;margin-left: 10px;"
+            data-toggle="modal">全部删除
+    </button>
     <table class="table" id="drug_tab">
-        <th>行号</th>
-        <th>药品编码</th>
-        <th>药品名称</th>
-        <th>药品规格</th>
-        <th>含税进价(元)</th>
-        <th>零售价格(元)</th>
-        <th>库存</th>
-        <th>产地</th>
-        <th>操作</th>
+        <tr>
+            <th>行号</th>
+            <th>药品编码</th>
+            <th>药品名称</th>
+            <th>药品规格</th>
+            <th>含税进价(元)</th>
+            <th>零售价格(元)</th>
+            <th>库存</th>
+            <th>产地</th>
+            <th>进货数量</th>
+            <th>进货金额</th>
+            <th>操作</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>
+                <input class='drugNo' type='text' style="width: 62px;"/>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+                <input class='registNo' id='registNo_1' type='text' style="width: 62px;"/>
+            </td>
+            <td class='registAmount'></td>
+            <td>
+                <button type='button' class='btn btn-default add_item_btn' onclick="draw_tr(this)"><i title="复制"
+                                                                                                      class="glyphicon glyphicon-plus"></i>
+                </button>
+                <button type='button' class='btn btn-default edit_btn' onclick="edit_tr(this)"><i title="修改"
+                                                                                                  class="glyphicon glyphicon-edit"></i>
+                </button>
+                <button type='button' class='btn btn-default del_btn' onclick="del_tr(this)"><i title="删除"
+                                                                                                class="glyphicon glyphicon-minus"></i>
+                </button>
+            </td>
+        </tr>
     </table>
+    <div>
+        <span style="font-weight: 600;font-size: medium">进货总金额：</span><input type="text" id="totalAmount" readonly/>(元)
+    </div>
 </div>
 
 <!-- add Modal -->
@@ -611,6 +718,7 @@
                         <input type="text" id="drugNumEdit" name="drugNumEdit" class="form-control">
                         <span id="drugNumEdit_errorinfo" class="error_info"></span>
                     </div>
+                    <input type="hidden" id='drugEditIndex'/>
                 </form>
             </div>
             <div class="modal-footer">

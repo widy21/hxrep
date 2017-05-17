@@ -7,6 +7,7 @@ import com.hx.med.sys.exception.BusinessException;
 import com.hx.med.sys.dao.DrugDao;
 import com.hx.med.sys.entity.Drug;
 import com.hx.med.sys.service.interfaces.DrugService;
+import com.hx.med.sys.vo.NewBatchDrugForm;
 import com.hx.med.sys.vo.NewDrugForm;
 import com.hx.med.sys.vo.QryDrugForm;
 import org.slf4j.Logger;
@@ -144,6 +145,22 @@ public class DrugServiceImpl implements DrugService {
             resultMap.put("query_flag","false");
             logger.debug("getDrugSpellInfo error : [{}]", e.getMessage());
             throw new BusinessException("getDrugSpellInfo error :"+e.getMessage());
+        }
+        return resultMap;
+    }
+
+    @Override
+    public Map batchAddDrugNum(NewBatchDrugForm[] newBatchDrugForms) throws BusinessException {
+        Map resultMap = new HashMap();
+        try{
+            for (NewBatchDrugForm newBatchDrugForm : newBatchDrugForms) {
+                drugDao.batchAddDrugNum(newBatchDrugForm);
+            }
+            resultMap.put("update_flag", "success");
+        }catch (Exception e){
+            resultMap.put("update_flag","false");
+            logger.debug("batchAddDrugNum error : [{}]", e.getMessage());
+            throw new BusinessException("batchAddDrugNum error :"+e.getMessage());
         }
         return resultMap;
     }

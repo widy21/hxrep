@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>订单信息查询</title>
+    <title>药品信息查询</title>
 
     <!-- Bootstrap -->
     <link href="<%=request.getContextPath()%>/css/bootstrap.min.css" rel="stylesheet">
@@ -32,7 +32,7 @@
                 inline:true,
                 minView:'month',
                 autoclose:true,
-                format: 'yyyy-mm-dd'      /*此属性是显示顺序，还有显示顺序是mm-dd-yyyy*/
+                format: 'yyyy-mm-dd' /*此属性是显示顺序，还有显示顺序是mm-dd-yyyy*/
             });
 
             var initDate = function(){
@@ -56,14 +56,18 @@
                 //加载后台数据页面
                 function loaddata() {
                     data = {
+                        "drugNo": $("#drugNo").val(),
+                        "drugOriginal": $("#drugOriginal").val(),
+                        "drugName": $("#drugName").val(),
+                        "drugSpe": $("#drugSpe").val(),
+                        "number": $("#number").val(),
                         "qryStartDate": $("#qryStartDate").val(),
                         "qryEndDate": $("#qryEndDate").val(),
-                        "opUser": $("#opUser").val(),
                         "currentPage": pagenow
                     }
                     $.ajax({
                         type: "POST",  //提交方式
-                        url: "${pageContext.request.contextPath}/med/order_qry",//路径
+                        url: "${pageContext.request.contextPath}/med/drug_page_qry",//路径
                         'contentType': 'application/json',
                         'dataType': 'json',
                         'data': JSON.stringify(data),
@@ -72,18 +76,20 @@
                             console.log(data);
                             totalPage = data.pageCount;//将后台数据复制给总页数
                             totalcount = data.recordNum;
+                            totalFee = data.totalFee;
+                            $("#totalFee").val(totalFee);
                             $("#drug_tab tr:gt(0)").empty();
-                            $.each(data.orders, function(index, order) {
+                            $.each(data.drugs, function(index, drug) {
                                 htmlobj = htmlobj + "<tr><td>"
                                 + (index+1) + "</td><td>"
-                                + order.receivableAmount + "</td><td>"
-                                + order.paidAmount + "</td><td>"
-                                + order.costAmount + "</td><td>"
-                                + order.grossProfit + "</td><td>"
-                                + order.tax + "</td><td>"
-                                + order.reduceTaxAmount + "</td><td>"
-                                + order.opUserName + "</td><td>"
-                                + order.createTime.substring(0,10) + "</td>"
+                                + drug.drugNo + "</td><td>"
+                                + drug.drugName + "</td><td>"
+                                + drug.specification + "</td><td>"
+                                + drug.purchasePrice + "</td><td>"
+                                + drug.sellingPrice + "</td><td>"
+                                + drug.number + "</td><td>"
+                                + drug.origin + "</td><td>"
+                                + drug.createTime.substring(0,10) + "</td>"
 
                                 htmlobj = htmlobj + "</tr>";
 
@@ -92,22 +98,7 @@
 
                             });
 
-                            $("#total_drug_tab tr:gt(0)").empty();
-                            var totalOrder = data.totalOrder;
-                            if(totalOrder != undefined){
-                                var total_htmlobj = "<tr><td>1</td><td>"
-                                        + totalOrder.receivableAmount + "</td><td>"
-                                        + totalOrder.paidAmount + "</td><td>"
-                                        + totalOrder.costAmount + "</td><td>"
-                                        + totalOrder.grossProfit + "</td><td>"
-                                        + totalOrder.tax + "</td><td>"
-                                        + totalOrder.reduceTaxAmount + "</td><td>"
-                                        + totalOrder.opUserName + "</td></tr>";
-
-                                $("#total_drug_tab").append(total_htmlobj);
-                            }
-
-                            if(data.orders.length == 0){
+                            if(data.drugs.length == 0){
                                 $("#drug_tab").append("<tr><td colspan='9' align='center' style='color:red;font-size:14px'>无记录。</td></tr>");
                             }
 
@@ -150,6 +141,9 @@
                     },
                     qryEndDate: {
                         required: true
+                    },
+                    number: {
+                        number:true
                     }
                 },
                 messages: {
@@ -158,6 +152,9 @@
                     },
                     qryEndDate: {
                         required: "请输入结束日期"
+                    },
+                    number: {
+                        number: "库存必须为数字"
                     }
                 },
                 errorPlacement:function(error,element){
@@ -186,6 +183,10 @@
             margin-top: 20px;
             /*background-color : #269abc;*/
         }
+        .error_info{
+            color: red;
+            font-weight: 100;
+        }
         .layout-content-title {
             font-size: 16px;
             font-weight: 600;
@@ -197,27 +198,49 @@
 </head>
 
 <body>
-<div align="center" id="main_div">
+<div id="main_div">
     <form role="form" id="qry_form" class="form-inline" style="align-content: center;width: 100%;">
+
+        <div class="form-group">
+            <label for="drugNo">药品编号</label>
+            <input type="text" id="drugNo" class="form-control">
+            <label id="drugNo_errorinfo"></label>
+        </div>
+
+        <div class="form-group">
+            <label for="drugName">药品名称</label>
+            <input type="text" id="drugName" class="form-control">
+            <label id="drugName_errorinfo"></label>
+        </div>
+        <div class="form-group">
+            <label for="drugSpe">药品规格</label>
+            <input type="text" id="drugSpe" class="form-control">
+            <label id="drugSpe_errorinfo"></label>
+        </div>
+        <div class="form-group">
+            <label for="drugOriginal">药品产地</label>
+            <input type="text" id="drugOriginal" class="form-control">
+            <label id="drugOriginal_errorinfo"></label>
+        </div><br>
+        <div class="form-group">
+            <label for="number">药品库存</label>
+            <input type="text" id="number" name="number" class="form-control">
+            <label id="number_errorinfo" class="error_info"></label>
+        </div>
+
         <div class="form-group">
             <label for="qryStartDate">开始时间</label>
             <input type="text" id="qryStartDate" name="qryStartDate" class="form-control date_format" value="" readonly>
-            <label id="qryStartDate_errorinfo"><label>
+            <label id="qryStartDate_errorinfo"></label>
         </div>
 
         <div class="form-group">
             <label for="qryEndDate">结束时间</label>
             <input type="text" id="qryEndDate" name="qryEndDate" class="form-control date_format" value="" readonly>
-
-
         </div>
-        <div class="form-group" style="min-width: 500px;margin-bottom:5px;">
-            <label for="opUser">业务员&nbsp;&nbsp;&nbsp;</label>
-            <select id="opUser"   class="form-control" style="min-width: 200px;">
-                <c:forEach items="${allUsers}" var="user" varStatus="vs">
-                    <option value="${user.id}">${user.name}</option>
-                </c:forEach>
-            </select>
+        <div class="form-group">
+            <label for="qryEndDate">库存金额</label>
+            <input type="text" id="totalFee" class="form-control" value="" readonly>
         </div>
         <button type="button" id="qry_btn" class="btn btn-default">查询</button>
     </form>
@@ -226,31 +249,18 @@
     <h3>详细数据</h3>
     <table class="table" id="drug_tab">
         <th>行号</th>
-        <th>应收金额</th>
-        <th>实收金额</th>
-        <th>成本金额</th>
-        <th>毛利</th>
-        <th>税额</th>
-        <th>扣税金额</th>
-        <th>业务员</th>
+        <th>药品编码</th>
+        <th>药品名称</th>
+        <th>药品规格</th>
+        <th>含税进价(元)</th>
+        <th>零售价格(元)</th>
+        <th>库存</th>
+        <th>产地</th>
         <th>创建时间</th>
     </table>
     <span style="font-size:14px;"><div class="text-center">
         <ul id="pagination-log" class="pagination-sm"></ul>
     </div></span>
-</div>
-<div>
-    <h3>汇总数据</h3>
-    <table class="table" id="total_drug_tab">
-        <th>行号</th>
-        <th>应收金额</th>
-        <th>实收金额</th>
-        <th>成本金额</th>
-        <th>毛利</th>
-        <th>税额</th>
-        <th>扣税金额</th>
-        <th>业务员</th>
-    </table>
 </div>
 </body>
 </html>
