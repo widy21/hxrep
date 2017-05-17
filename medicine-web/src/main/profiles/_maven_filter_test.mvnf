@@ -1,7 +1,0 @@
-#jdbc配置
-jdbc.url=jdbc:mysql://54.169.218.35:3306/med?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
-jdbc.user=ledostat
-jdbc.passwd=ledostat
-
-#log配置文件
-log.level=debug
