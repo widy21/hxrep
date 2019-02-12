@@ -35,7 +35,7 @@
                             var drugs = result.allDrugSpell;
                             console.log(drugs.length);
                             $.each(drugs, function (index, ele) {
-                                var key = ele.pinyin+' 【'+ele.drugName+'】';
+                                var key = ele.drugNo + '-' + ele.pinyin + ' 【' + ele.drugName + '】';
                                 name2Id[key] = ele.drugNo;//键值对保存下来。
                                 spell_array.push(key);
                             });
