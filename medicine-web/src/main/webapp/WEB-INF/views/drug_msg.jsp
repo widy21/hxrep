@@ -56,7 +56,6 @@
                 //加载后台数据页面
                 function loaddata() {
                     data = {
-                        "drugNo": $("#drugNo").val(),
                         "drugOriginal": $("#drugOriginal").val(),
                         "drugName": $("#drugName").val(),
                         "drugSpe": $("#drugSpe").val(),
@@ -171,6 +170,13 @@
                 initDrugData();
             });
 
+            $("#export_btn").click(function(){
+                if(!$("#qry_form").validate(validate_config).form()){
+                    return false;
+                }
+                initDrugData();
+            });
+
             initDate();
         });
     </script>
@@ -243,6 +249,7 @@
             <input type="text" id="totalFee" class="form-control" value="" readonly>
         </div>
         <button type="button" id="qry_btn" class="btn btn-default">查询</button>
+        <button type="button" id="export_btn" class="btn btn-default">导出</button>
     </form>
 </div>
 <div>

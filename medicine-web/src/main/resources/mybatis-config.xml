@@ -11,5 +11,7 @@
         <setting name="useColumnLabel" value="true"/>
         <!--开启驼峰命名转换Table:create_time到 Entity(createTime)-->
         <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!-- 打印查询语句 -->
+        <setting name="logImpl" value="STDOUT_LOGGING" />
     </settings>
 </configuration>
