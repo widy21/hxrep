@@ -59,7 +59,7 @@ $(document).ready(function () {
             alert('进货数量输入错误');
             return false;
         }
-        $(this).parent().parent().find("td").eq(9).text(parseFloat(purchasePrice * registNum).toFixed(2));
+        $(this).parent().parent().find("td").eq(11).text(parseFloat(purchasePrice * registNum).toFixed(2));
         //计算总金额
         caculateTotalAmount();
     });
@@ -109,6 +109,16 @@ $(document).ready(function () {
         if (ev.keyCode == 13) {
             console.log(e.srcElement.id);
             if (e.srcElement.id.match('registNo_') != null) {
+                var index = e.srcElement.id.split('_')[1];
+                console.log('index = '+index);
+                $("#checkInNo_"+index).focus().select();
+            }
+            if (e.srcElement.id.match('checkInNo_') != null) {
+                var index = e.srcElement.id.split('_')[1];
+                console.log('index = '+index);
+                $("#legalDate_"+index).focus().select();
+            }
+            if (e.srcElement.id.match('legalDate_') != null) {
                 draw_tr($("#drug_tab tr:last").find("td").eq(8).find("input"));
             }
         }
@@ -392,6 +402,8 @@ function draw_tr(obj) {
     var index = $("#drug_tab tr:last").index();
     console.log(index);
     $("#drug_tab tr").eq(index).find("td").eq(8).find("input").attr("id", "registNo_" + index);
+    $("#drug_tab tr").eq(index).find("td").eq(9).find("input").attr("id", "checkInNo_" + index);
+    $("#drug_tab tr").eq(index).find("td").eq(10).find("input").attr("id", "legalDate_" + index);
     $("#drug_tab tr").eq(index).find("td").eq(0).text(index);
     $("#drug_tab tr").eq(index).find("td").eq(1).find("input").focus().select();
 
@@ -427,7 +439,7 @@ function draw_tr(obj) {
             alert('进货数量输入错误');
             return false;
         }
-        $(this).parent().parent().find("td").eq(9).text(parseFloat(purchasePrice * registNum).toFixed(2));
+        $(this).parent().parent().find("td").eq(11).text(parseFloat(purchasePrice * registNum).toFixed(2));
         //计算总金额
         caculateTotalAmount();
     });
@@ -507,7 +519,7 @@ function qryFun(drugNo, index) {
 function caculateTotalAmount() {
     var total_amount = 0;
     $("#drug_tab tr:gt(0)").each(function () {
-        var amount = parseFloat($(this).find("td").eq(9).text());
+        var amount = parseFloat($(this).find("td").eq(11).text());
         if (!isNaN(amount)) {
             total_amount += amount;
         }

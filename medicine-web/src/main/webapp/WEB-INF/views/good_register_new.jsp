@@ -88,13 +88,13 @@
             <td></td>
             <td></td>
             <td>
-                <input class='' id='checkInNo' type='text' style="width: 62px;"/>
-            </td>
-            <td>
-                <input class='registNo' id='legalDate' type='text' style="width: 62px;"/>
-            </td>
-            <td>
                 <input class='registNo' id='registNo_1' type='text' style="width: 62px;"/>
+            </td>
+            <td>
+                <input class='checkInNo' id='checkInNo_1' type='text' style="width: 62px;"/>
+            </td>
+            <td>
+                <input class='legalDate' id='legalDate_1' type='text' style="width: 62px;"/>
             </td>
             <td class='registAmount'></td>
             <td>
