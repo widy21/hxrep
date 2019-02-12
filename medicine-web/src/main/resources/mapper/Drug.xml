@@ -26,7 +26,10 @@
     </update>
 
     <update id="batchAddDrugNum">
-        update drugs set number = number + #{newBatchDrugForm.regist_num} where drug_no = #{newBatchDrugForm.drug_no};
+        update drugs set number = number + #{newBatchDrugForm.regist_num},
+          checkIn_no = #{newBatchDrugForm.checkIn_no},
+          legal_date = #{newBatchDrugForm.legal_date}
+         where drug_no = #{newBatchDrugForm.drug_no};
     </update>
 
     <update id="updateDrug">

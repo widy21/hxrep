@@ -56,6 +56,7 @@
                 //加载后台数据页面
                 function loaddata() {
                     data = {
+                        "drugNo": $("#drugNo").val(),
                         "drugOriginal": $("#drugOriginal").val(),
                         "drugName": $("#drugName").val(),
                         "drugSpe": $("#drugSpe").val(),
