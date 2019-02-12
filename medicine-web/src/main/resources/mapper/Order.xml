@@ -18,6 +18,7 @@
         and LEFT(create_time,10) <= #{ orderForm.qryEndDate}
         and op_user= #{ orderForm.opUser}
         ]]>
+        group BY create_time
     </select>
 
     <select id="pageQueryByDate" resultType="com.hx.med.sys.entity.Order">
