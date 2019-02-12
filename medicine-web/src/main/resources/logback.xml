@@ -7,7 +7,7 @@
     <contextName>HXpro</contextName>
 
     <appender name="rollingInfoFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>E:\med_log.log</file>
+        <file>${catalina.base}/logs/med_log.log</file>
         <append>true</append>
         <prudent>false</prudent>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
