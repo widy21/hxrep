@@ -179,6 +179,8 @@ $(document).ready(function () {
             var regist_obj = {};
             regist_obj.drug_no = $(this).find("td").eq(1).find("input").val();
             regist_obj.regist_num = $(this).find("td").eq(8).find("input").val();
+            regist_obj.checkIn_no = $(this).find("td").eq(9).find("input").val();
+            regist_obj.legal_date = $(this).find("td").eq(10).find("input").val();
             if (isNaN(parseInt(regist_obj.regist_num))) {
                 check_flag = false;
             }
