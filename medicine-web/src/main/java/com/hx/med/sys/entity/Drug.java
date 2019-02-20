@@ -12,6 +12,30 @@ public class Drug {
     private Double sellingPrice;
     private Integer number;
     private Date createTime;
+    /**
+     * 批次
+     */
+    private String checkInNo;
+    /**
+     * 有效期
+     */
+    private String legalDate;
+
+    public String getCheckInNo() {
+        return checkInNo;
+    }
+
+    public void setCheckInNo(String checkInNo) {
+        this.checkInNo = checkInNo;
+    }
+
+    public String getLegalDate() {
+        return legalDate;
+    }
+
+    public void setLegalDate(String legalDate) {
+        this.legalDate = legalDate;
+    }
 
     public Double getPurchasePrice() {
         return purchasePrice;
