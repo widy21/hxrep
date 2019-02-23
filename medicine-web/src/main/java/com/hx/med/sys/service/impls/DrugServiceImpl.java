@@ -83,6 +83,7 @@ public class DrugServiceImpl implements DrugService {
             resultMap.put("pageCount", pageUtil.getPageCount());
             resultMap.put("totalFee", totalFee);
         }catch (Exception e){
+            e.printStackTrace();
             resultMap.put("query_flag","false");
             logger.debug("queryDrugByCondition error : [{}]", e.getMessage());
             throw new BusinessException("queryDrugByCondition error :"+e.getMessage());

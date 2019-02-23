@@ -38,6 +38,8 @@ $(document).ready(function(){
                 "number": $("#number").val(),
                 "qryStartDate": $("#qryStartDate").val(),
                 "qryEndDate": $("#qryEndDate").val(),
+                "legalDate": $("#legalDate").val(),
+                "checkInNo": $("#checkInNo").val(),
                 "currentPage": pagenow
             }
             $.ajax({

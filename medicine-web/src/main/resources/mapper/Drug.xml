@@ -89,6 +89,18 @@
                 number = #{qryDrugForm.number}
                 ]]>
             </if>
+            <if test="qryDrugForm.legalDate != null and qryDrugForm.legalDate != ''">
+                <![CDATA[
+                and
+                legal_date = #{qryDrugForm.legalDate}
+                ]]>
+            </if>
+            <if test="qryDrugForm.checkInNo != null and qryDrugForm.checkInNo != ''">
+                <![CDATA[
+                and
+                checkIn_no = #{qryDrugForm.checkInNo}
+                ]]>
+            </if>
         </where>
         limit #{ qryDrugForm.start},#{ qryDrugForm.pageSize}
     </select>
@@ -137,6 +149,18 @@
                 <![CDATA[
                 and
                 number = #{qryDrugForm.number}
+                ]]>
+            </if>
+            <if test="qryDrugForm.legalDate != null and qryDrugForm.legalDate != ''">
+                <![CDATA[
+                and
+                legal_date = #{qryDrugForm.legalDate}
+                ]]>
+            </if>
+            <if test="qryDrugForm.checkInNo != null and qryDrugForm.checkInNo != ''">
+                <![CDATA[
+                and
+                checkIn_no = #{qryDrugForm.checkInNo}
                 ]]>
             </if>
         </where>

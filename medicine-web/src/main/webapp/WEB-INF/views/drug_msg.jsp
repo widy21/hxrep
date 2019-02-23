@@ -2,6 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="zh-cn">
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -29,18 +30,21 @@
     <script src="<%=request.getContextPath()%>/js/modules/drug_msg.js" type="text/javascript"></script>
 
     <style>
-        body{
+        body {
         //background-color: #46b8da;
         }
+
         #main_div {
             padding: 25px;
             margin-top: 20px;
             /*background-color : #269abc;*/
         }
-        .error_info{
+
+        .error_info {
             color: red;
             font-weight: 100;
         }
+
         .layout-content-title {
             font-size: 16px;
             font-weight: 600;
@@ -84,7 +88,8 @@
 
         <div class="form-group">
             <label for="qryStartDate">开始时间</label>
-            <input type="text" id="qryStartDate" name="qryStartDate" class="form-control date_format" value="" readonly>
+            <input type="text" id="qryStartDate" name="qryStartDate" class="form-control date_format" value=""
+                   readonly>
             <label id="qryStartDate_errorinfo"></label>
         </div>
 
@@ -95,10 +100,22 @@
         <div class="form-group">
             <label for="qryEndDate">库存金额</label>
             <input type="text" id="totalFee" class="form-control" value="" readonly>
+        </div><br>
+
+        <div class="form-group">
+            <label for="qryEndDate">生产批次</label>
+            <input type="text" id="checkInNo" name="checkInNo" class="form-control date_format" value="">
         </div>
+        <div class="form-group">
+            <label for="qryEndDate">有效期</label>
+            <input type="text" id="legalDate" name="legalDate" class="form-control" value="">
+        </div><br>
+
+    </form>
+    <div class="center">
         <button type="button" id="qry_btn" class="btn btn-default">查询</button>
         <button type="button" id="export_btn" class="btn btn-default">导出</button>
-    </form>
+    </div>
 </div>
 <div>
     <h3>详细数据</h3>
@@ -115,9 +132,12 @@
         <th>批次</th>
         <th>有效期</th>
     </table>
-    <span style="font-size:14px;"><div class="text-center">
-        <ul id="pagination-log" class="pagination-sm"></ul>
-    </div></span>
+    <span style="font-size:14px;">
+            <div class="text-center">
+                <ul id="pagination-log" class="pagination-sm"></ul>
+            </div>
+        </span>
 </div>
 </body>
+
 </html>
