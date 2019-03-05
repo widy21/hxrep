@@ -32,6 +32,11 @@
          where drug_no = #{newBatchDrugForm.drug_no};
     </update>
 
+    <update id="checkInDrug">
+       INSERT INTO drugs_checkin (drug_no, regist_num, create_time, checkIn_no, legal_date, checkIn_amount)
+       VALUES(#{newBatchDrugForm.drug_no}, #{newBatchDrugForm.regist_num}, now(), #{newBatchDrugForm.checkIn_no}, #{newBatchDrugForm.legal_date}, #{newBatchDrugForm.checkIn_amount});
+    </update>
+
     <update id="updateDrug">
         update drugs set drug_name = #{drugForm.drugNameAdd},specification = #{drugForm.drugSpeAdd},
          origin = #{drugForm.drugOriginalAdd},selling_price=#{drugForm.drugSellPriceAdd},purchase_price=#{drugForm.price},
@@ -215,4 +220,127 @@
         </where>
     </select>
 
+    <select id="pageQueryCheckInDrugByCondition" resultType="com.hx.med.sys.entity.Drug">
+        select b.id, a.drug_no, a.drug_name, a.specification, a.origin, a.purchase_price, a.selling_price, b.regist_num as `number`, b.create_time, b.checkIn_no, b.legal_date,b.checkIn_amount
+        from drugs_checkin b,drugs a
+        <where>
+            <![CDATA[
+              a.drug_no = b.drug_no
+            ]]>
+            <if test="qryDrugForm.qryStartDate != null and qryDrugForm.qryEndDate != null">
+                <![CDATA[
+                and
+                LEFT(b.create_time,10) >= #{ qryDrugForm.qryStartDate}
+                and
+                LEFT(b.create_time,10) <= #{ qryDrugForm.qryEndDate}
+                ]]>
+            </if>
+            <if test="qryDrugForm.drugNo != null and qryDrugForm.drugNo != ''">
+                <![CDATA[
+                and
+                a.drug_no = #{qryDrugForm.drugNo}
+                ]]>
+            </if>
+            <if test="qryDrugForm.drugName != null and qryDrugForm.drugName != ''">
+                <bind name="pattern" value="'%' + qryDrugForm.drugName + '%'" />
+                <![CDATA[
+                and
+                b.drug_name like #{pattern}
+                ]]>
+            </if>
+            <if test="qryDrugForm.drugSpe != null and qryDrugForm.drugSpe != ''">
+                <![CDATA[
+                and
+                b.specification = #{qryDrugForm.drugSpe}
+                ]]>
+            </if>
+            <if test="qryDrugForm.drugOriginal != null and qryDrugForm.drugOriginal != ''">
+                <bind name="pattern" value="'%' + qryDrugForm.drugOriginal + '%'" />
+                <![CDATA[
+                and
+                b.origin = #{pattern}
+                ]]>
+            </if>
+            <if test="qryDrugForm.number != null and qryDrugForm.number != ''">
+                <![CDATA[
+                and
+                a.regist_num = #{qryDrugForm.number}
+                ]]>
+            </if>
+            <if test="qryDrugForm.legalDate != null and qryDrugForm.legalDate != ''">
+                <![CDATA[
+                and
+                b.legal_date = #{qryDrugForm.legalDate}
+                ]]>
+            </if>
+            <if test="qryDrugForm.checkInNo != null and qryDrugForm.checkInNo != ''">
+                <![CDATA[
+                and
+                b.checkIn_no = #{qryDrugForm.checkInNo}
+                ]]>
+            </if>
+        </where>
+        limit #{ qryDrugForm.start},#{ qryDrugForm.pageSize}
+    </select>
+
+    <select id="pageCheckInDrugCountQueryByCondition" resultType="Integer">
+        select COUNT(*) from drugs_checkin a,drugs b
+        <where>
+            <![CDATA[
+              a.drug_no = b.drug_no
+            ]]>
+            <if test="qryDrugForm.qryStartDate != null and qryDrugForm.qryEndDate != null">
+                <![CDATA[
+                and
+                LEFT(a.create_time,10) >= #{ qryDrugForm.qryStartDate}
+                and
+                LEFT(a.create_time,10) <= #{ qryDrugForm.qryEndDate}
+                ]]>
+            </if>
+            <if test="qryDrugForm.drugNo != null and qryDrugForm.drugNo != ''">
+                <![CDATA[
+                and
+                a.drug_no = #{qryDrugForm.drugNo}
+                ]]>
+            </if>
+            <if test="qryDrugForm.drugName != null and qryDrugForm.drugName != ''">
+                <bind name="pattern" value="'%' + qryDrugForm.drugName + '%'" />
+                <![CDATA[
+                and
+                b.drug_name like #{pattern}
+                ]]>
+            </if>
+            <if test="qryDrugForm.drugSpe != null and qryDrugForm.drugSpe != ''">
+                <![CDATA[
+                and
+                b.specification = #{qryDrugForm.drugSpe}
+                ]]>
+            </if>
+            <if test="qryDrugForm.drugOriginal != null and qryDrugForm.drugOriginal != ''">
+                <bind name="pattern" value="'%' + qryDrugForm.drugOriginal + '%'" />
+                <![CDATA[
+                and
+                b.origin = #{pattern}
+                ]]>
+            </if>
+            <if test="qryDrugForm.number != null and qryDrugForm.number != ''">
+                <![CDATA[
+                and
+                a.regist_num = #{qryDrugForm.number}
+                ]]>
+            </if>
+            <if test="qryDrugForm.legalDate != null and qryDrugForm.legalDate != ''">
+                <![CDATA[
+                and
+                b.legal_date = #{qryDrugForm.legalDate}
+                ]]>
+            </if>
+            <if test="qryDrugForm.checkInNo != null and qryDrugForm.checkInNo != ''">
+                <![CDATA[
+                and
+                b.checkIn_no = #{qryDrugForm.checkInNo}
+                ]]>
+            </if>
+        </where>
+    </select>
 </mapper>

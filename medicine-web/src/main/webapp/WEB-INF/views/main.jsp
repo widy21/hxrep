@@ -147,6 +147,7 @@
                         <li><a href="javascript:void(0)" onclick="return false;" tab_id="1" tab_url="show_order_checkout" target="iFrame2"><i class="glyphicon glyphicon-euro"></i>订单日结</a></li>
                         <li><a href="javascript:void(0)" onclick="return false;" tab_id="2" tab_url="show_order_msg" target="iFrame3"><i class="glyphicon glyphicon-search"></i>销售信息查询</a></li>
                         <li><a href="javascript:void(0)" onclick="return false;" tab_id="3" tab_url="show_drug_msg" target="iFrame4"><i class="glyphicon glyphicon-zoom-in"></i>库存信息查询</a></li>
+                        <li><a href="javascript:void(0)" onclick="return false;" tab_id="4" tab_url="show_checkin_drug_msg" target="iFrame5"><i class="glyphicon glyphicon-zoom-in"></i>入库信息查询</a></li>
                     </ul>
                 </li>
             </ul>

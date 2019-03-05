@@ -155,13 +155,38 @@ public class DrugServiceImpl implements DrugService {
         Map resultMap = new HashMap();
         try{
             for (NewBatchDrugForm newBatchDrugForm : newBatchDrugForms) {
+                // 增加库存信息
                 drugDao.batchAddDrugNum(newBatchDrugForm);
+                // 新增入库信息
+                drugDao.checkInDrug(newBatchDrugForm);
             }
             resultMap.put("update_flag", "success");
         }catch (Exception e){
             resultMap.put("update_flag","false");
             logger.debug("batchAddDrugNum error : [{}]", e.getMessage());
             throw new BusinessException("batchAddDrugNum error :"+e.getMessage());
+        }
+        return resultMap;
+    }
+
+    @Override
+    public Map queryCheckInDrugByCondition(QryDrugForm qryDrugForm) throws BusinessException {
+        Map resultMap = new HashMap();
+        try{
+            int start = (qryDrugForm.getCurrentPage()-1)*qryDrugForm.getPageSize();
+            qryDrugForm.setStart(start);
+            List<Drug> drugs = drugDao.pageQueryCheckInDrugByCondition(qryDrugForm);
+            Integer recordNum = drugDao.pageCheckInDrugCountQueryByCondition(qryDrugForm);
+            PageUtil pageUtil = new PageUtil(10, recordNum, qryDrugForm.getCurrentPage());
+            resultMap.put("drugs", drugs);
+            resultMap.put("recordNum", recordNum);
+            resultMap.put("currentPage", qryDrugForm.getCurrentPage());
+            resultMap.put("pageCount", pageUtil.getPageCount());
+        }catch (Exception e){
+            e.printStackTrace();
+            resultMap.put("query_flag","false");
+            logger.debug("queryDrugByCondition error : [{}]", e.getMessage());
+            throw new BusinessException("queryCheckInDrugByCondition error :"+e.getMessage());
         }
         return resultMap;
     }

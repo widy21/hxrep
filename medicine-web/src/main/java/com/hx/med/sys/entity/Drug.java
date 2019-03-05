@@ -12,6 +12,7 @@ public class Drug {
     private Double sellingPrice;
     private Integer number;
     private Date createTime;
+    private Double checkInAmount;
     /**
      * 批次
      */
@@ -20,6 +21,14 @@ public class Drug {
      * 有效期
      */
     private String legalDate;
+
+    public Double getCheckInAmount() {
+        return checkInAmount;
+    }
+
+    public void setCheckInAmount(Double checkInAmount) {
+        this.checkInAmount = checkInAmount;
+    }
 
     public String getCheckInNo() {
         return checkInNo;

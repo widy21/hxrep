@@ -59,4 +59,11 @@ public interface DrugService {
      * @return
      */
     Map batchAddDrugNum(NewBatchDrugForm[] newBatchDrugForms) throws BusinessException;
+
+    /**
+     * 药品入库信息分页查询
+     * @param qryDrugForm
+     * @return
+     */
+    Map queryCheckInDrugByCondition(QryDrugForm qryDrugForm) throws BusinessException;
 }

@@ -181,6 +181,8 @@ $(document).ready(function () {
             regist_obj.regist_num = $(this).find("td").eq(8).find("input").val();
             regist_obj.checkIn_no = $(this).find("td").eq(9).find("input").val();
             regist_obj.legal_date = $(this).find("td").eq(10).find("input").val();
+            regist_obj.checkIn_amount = $(this).find("td").eq(11).text();
+            console.log('checkIn_amount ========= ',$(this).find("td").eq(11).text());
             if (isNaN(parseInt(regist_obj.regist_num))) {
                 check_flag = false;
             }

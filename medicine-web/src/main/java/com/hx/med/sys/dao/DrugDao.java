@@ -33,4 +33,24 @@ public interface DrugDao {
     Double queryTotalFeeByCondition(@Param("qryDrugForm")QryDrugForm qryDrugForm);
 
     void batchAddDrugNum(@Param("newBatchDrugForm")NewBatchDrugForm newBatchDrugForms);
+
+    /**
+     * 药品信息插入入库信息表
+     * @param newBatchDrugForm
+     */
+    void checkInDrug(@Param("newBatchDrugForm")NewBatchDrugForm newBatchDrugForm);
+
+    /**
+     * 根据条件查询入库信息
+     * @param qryDrugForm
+     * @return
+     */
+    List<Drug> pageQueryCheckInDrugByCondition(@Param("qryDrugForm")QryDrugForm qryDrugForm);
+
+    /**
+     * 根据条件查询入库信息行数
+     * @param qryDrugForm
+     * @return
+     */
+    Integer pageCheckInDrugCountQueryByCondition(@Param("qryDrugForm")QryDrugForm qryDrugForm);
 }

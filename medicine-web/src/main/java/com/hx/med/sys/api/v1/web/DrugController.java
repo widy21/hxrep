@@ -110,6 +110,17 @@ public class DrugController {
         Map resultMap = drugService.queryDrugByCondition(qryDrugForm);
         return resultMap;
     }
+    /**
+     * 药品入库信息分页查询
+     * @return
+     * @throws BusinessException
+     */
+    @ResponseBody
+    @RequestMapping(value = "/checkin_drug_page_qry", method = RequestMethod.POST)
+    public Object checkInDrygQry(@RequestBody @FluentValid final QryDrugForm qryDrugForm) throws BusinessException {
+        Map resultMap = drugService.queryCheckInDrugByCondition(qryDrugForm);
+        return resultMap;
+    }
 
     @RequestMapping(value = "/show_drug_msg", method = RequestMethod.GET)
     public Object showDrugMsg(HttpServletRequest request) throws BusinessException {
@@ -117,6 +128,14 @@ public class DrugController {
         List<User> allUsers = userService.getAllUsers();
         model.put("allUsers", allUsers);
         return new ModelAndView("drug_msg",model);
+    }
+
+    @RequestMapping(value = "/show_checkin_drug_msg", method = RequestMethod.GET)
+    public Object showCheckInDrugMsg(HttpServletRequest request) throws BusinessException {
+        Map<String, Object> model = new HashMap<String, Object>();
+        List<User> allUsers = userService.getAllUsers();
+        model.put("allUsers", allUsers);
+        return new ModelAndView("checkin_drug_msg",model);
     }
 
     @RequestMapping(value = "/show_menu", method = RequestMethod.GET)
