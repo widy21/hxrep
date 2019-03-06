@@ -67,7 +67,7 @@ public class OrderController {
     }
 
     /**
-     * 订单入库
+     * 订单出库
      * @return
      * @throws BusinessException
      */

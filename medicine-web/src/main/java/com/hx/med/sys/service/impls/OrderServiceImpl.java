@@ -54,7 +54,10 @@ public class OrderServiceImpl implements OrderService{
             String sellDetails = orderForm.getSellDetails();
             NewDrugForm[] newDrugForms = generateDrugFormArray(sellDetails);
             if(newDrugForms.length>0){
+                // 修改药品库存
                 drugService.updateDrugStock(newDrugForms);
+                // 新增出库信息
+                drugService.addCheckOutDrugs(newDrugForms);
             }
             resultMap.put("opt_flag", "success");
         }catch (Exception e){
@@ -71,8 +74,12 @@ public class OrderServiceImpl implements OrderService{
             NewDrugForm[] drugArray = new NewDrugForm[list.size()];
             for(int i=0;i<list.size();i++){
                 NewDrugForm drugForm = new NewDrugForm();
+                // 商品编码
                 drugForm.setDrugNoAdd((String) list.get(i).get("drugNo"));
+                // 销售数量
                 drugForm.setNumber(Integer.parseInt((String) list.get(i).get("sellNum")));
+                // 销售金额
+                drugForm.setDrugSellPriceAdd(Double.parseDouble((String) list.get(i).get("sellAmount")));
                 drugArray[i] = drugForm;
             }
             return drugArray;

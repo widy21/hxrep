@@ -48,6 +48,11 @@
          where drug_no = #{drugForm.drugNoAdd};
     </update>
 
+    <update id="addCheckOutDrug">
+        INSERT INTO med.drugs_checkout (drug_no, checkout_num, checkout_amount, gross_profit, create_time)
+        VALUES(#{drugForm.drugNoAdd}, #{drugForm.number}, #{drugForm.drugSellPriceAdd}, #{drugForm.checkOutGrossProfit}, now());
+    </update>
+
     <select id="pageQueryByCondition" resultType="com.hx.med.sys.entity.Drug">
         select * from drugs
         <where>

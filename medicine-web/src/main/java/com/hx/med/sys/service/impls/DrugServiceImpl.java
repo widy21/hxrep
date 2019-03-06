@@ -136,6 +136,22 @@ public class DrugServiceImpl implements DrugService {
     }
 
     @Override
+    public Map addCheckOutDrugs(NewDrugForm[] newDrugForms) throws BusinessException {
+        Map resultMap = new HashMap();
+        try{
+            for (NewDrugForm drugForm : newDrugForms) {
+                drugDao.addCheckOutDrug(drugForm);
+            }
+            resultMap.put("update_flag", "success");
+        }catch (Exception e){
+            resultMap.put("update_flag","false");
+            logger.debug("updateDrugStock error : [{}]", e.getMessage());
+            throw new BusinessException("updateDrugStock error :"+e.getMessage());
+        }
+        return resultMap;
+    }
+
+    @Override
     public Map getDrugSpellInfo() throws BusinessException {
         Map resultMap = new HashMap();
         try{

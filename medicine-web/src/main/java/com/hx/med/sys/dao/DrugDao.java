@@ -53,4 +53,10 @@ public interface DrugDao {
      * @return
      */
     Integer pageCheckInDrugCountQueryByCondition(@Param("qryDrugForm")QryDrugForm qryDrugForm);
+
+    /**
+     * 新增出库信息
+     * @param drugForm
+     */
+    void addCheckOutDrug(NewDrugForm drugForm);
 }

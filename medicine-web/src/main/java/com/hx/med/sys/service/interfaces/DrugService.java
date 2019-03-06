@@ -47,6 +47,12 @@ public interface DrugService {
     Map updateDrugStock(NewDrugForm[] newDrugForm) throws BusinessException;
 
     /**
+     * 新增出库信息
+     * @param newDrugForms
+     */
+    Map addCheckOutDrugs(NewDrugForm[] newDrugForms) throws BusinessException;
+
+    /**
      * 查询药品拼写信息
      * @return
      * @throws BusinessException
@@ -66,4 +72,6 @@ public interface DrugService {
      * @return
      */
     Map queryCheckInDrugByCondition(QryDrugForm qryDrugForm) throws BusinessException;
+
+
 }
