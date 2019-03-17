@@ -104,7 +104,7 @@
 
         <div class="form-group">
             <label for="qryEndDate">生产批次</label>
-            <input type="text" id="checkInNo" name="checkInNo" class="form-control date_format" value="">
+            <input type="text" id="checkInNo" name="checkInNo" class="form-control" value="">
         </div>
         <div class="form-group">
             <label for="qryEndDate">有效期</label>

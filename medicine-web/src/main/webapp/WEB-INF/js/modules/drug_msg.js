@@ -42,6 +42,7 @@ $(document).ready(function(){
                 "checkInNo": $("#checkInNo").val(),
                 "currentPage": pagenow
             }
+            console.log('data= ',data);
             $.ajax({
                 type: "POST",  //提交方式
                 url: contextPath + "/med/drug_page_qry",//路径

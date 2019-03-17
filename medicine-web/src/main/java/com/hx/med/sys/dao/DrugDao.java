@@ -58,5 +58,5 @@ public interface DrugDao {
      * 新增出库信息
      * @param drugForm
      */
-    void addCheckOutDrug(NewDrugForm drugForm);
+    void addCheckOutDrug(@Param("drugForm")NewDrugForm drugForm);
 }

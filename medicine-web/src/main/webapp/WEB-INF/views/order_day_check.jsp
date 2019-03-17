@@ -216,14 +216,15 @@
                 console.log('添加后销量：'+add_drug_info[key]);
 
                 var trHTML = "<tr><td>"
-                        +$("#drugNo").val()+"</td><td>"
-                        +$("#drugNameShow").val()+"</td><td>"
-                        +$("#drugSpeShow").val()+"</td><td>"
-                        +$("#purchasePriceShow").val()+"</td><td>"
-                        +$("#costAmount").val()+"</td><td>"
-                        +$("#sellAmount").val()+"</td><td>"
-                        +$("#sellNum").val()+"</td>"
-                        +"<td><button type='button' class='btn btn-default del_row_btn'>删除</button></td></tr>"
+                    +$("#drugNo").val()+"</td><td>"
+                    +$("#drugNameShow").val()+"</td><td>"
+                    +$("#drugSpeShow").val()+"</td><td>"
+                    +$("#purchasePriceShow").val()+"</td><td>"
+                    +$("#costAmount").val()+"</td><td>"
+                    +$("#sellAmount").val()+"</td><td>"
+                    +$("#sellNum").val()+"</td><td>"
+                    +get_row_profit($("#costAmount").val(),$("#sellAmount").val())+"</td><td>"
+                    +"<button type='button' class='btn btn-default del_row_btn'>删除</button></td></tr>"
                 $("#drug_tab").append(trHTML);
                 calculateTotalAmount();
                 $("#totalInfoForm").show();
@@ -235,6 +236,19 @@
 
             });
 
+            /**
+             * 获取行数据的毛利信息。
+             */
+            function get_row_profit(costAmount, sellAmount) {
+                //税额 = 含税毛利（实收-成本） * 0.15
+                var tax = (parseFloat(sellAmount)-costAmount)*0.15;
+                //扣税金额
+                var reduceTaxAmount = parseFloat(sellAmount) - tax;
+                //毛利 = 扣税金额 - 成本
+                var grossProfit = parseFloat(reduceTaxAmount) - parseFloat(costAmount);
+                console.log('get_row_profit()-->grossProfit=',grossProfit)
+                return grossProfit+'';
+            }
 
             function calculateTotalAmount(){
                 var totalAmount = 0;
@@ -476,6 +490,7 @@
         <th>成本金额</th>
         <th>销售金额</th>
         <th>销售数量</th>
+        <th>毛利金额</th>
         <th>操作</th>
     </table>
     <form role="form" class="form-inline" id="totalInfoForm" style="align-content: center;width:100%;display:none;">
